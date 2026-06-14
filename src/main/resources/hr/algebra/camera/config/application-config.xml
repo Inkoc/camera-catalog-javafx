@@ -1,0 +1,12 @@
+<configuration>
+    <window>
+        <width>1280</width>
+        <height>800</height>
+        <title>Camera Catalog</title>
+    </window>
+    <database>
+        <url>jdbc:postgresql://localhost:5432/camera_db</url>
+        <username>username</username>
+        <password>password</password>
+    </database>
+</configuration>

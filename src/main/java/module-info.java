@@ -1,6 +1,8 @@
 module hr.algebra.camera {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.xml;
+    requires java.sql;
 
 
     opens hr.algebra.camera to javafx.fxml;
