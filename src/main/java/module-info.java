@@ -3,6 +3,7 @@ module hr.algebra.camera {
     requires javafx.fxml;
     requires java.xml;
     requires java.sql;
+    requires jbcrypt;
 
 
     opens hr.algebra.camera to javafx.fxml;
