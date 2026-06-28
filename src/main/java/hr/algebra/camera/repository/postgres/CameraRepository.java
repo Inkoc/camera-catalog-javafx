@@ -162,8 +162,7 @@ public class CameraRepository implements ICameraRepository {
                 resultSet.getString("image_path"),
                 brand,
                 CameraType.valueOf(resultSet.getString("camera_type")),
-                Purpose.valueOf(resultSet.getString("purpose")),
-                new ArrayList<>()
+                Purpose.valueOf(resultSet.getString("purpose"))
         );
     }
 

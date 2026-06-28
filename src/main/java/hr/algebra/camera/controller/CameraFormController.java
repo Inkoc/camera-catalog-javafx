@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -145,8 +144,7 @@ public class CameraFormController {
                 imagePath,
                 brandComboBox.getValue(),
                 typeComboBox.getValue(),
-                purposeComboBox.getValue(),
-                (editing == null) ? new ArrayList<>() : editing.getCompatibleLenses()
+                purposeComboBox.getValue()
         );
     }
 

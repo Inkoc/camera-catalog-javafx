@@ -3,8 +3,6 @@ package hr.algebra.camera.model;
 import hr.algebra.camera.model.enums.CameraType;
 import hr.algebra.camera.model.enums.Purpose;
 
-import java.util.List;
-
 public class Camera extends AbstractEntity{
     private int releaseYear;
     private double megapixels;
@@ -17,7 +15,6 @@ public class Camera extends AbstractEntity{
     private Brand brand;
     private CameraType cameraType;
     private Purpose purpose;
-    private final List<Lens> compatibleLenses;
 
     public Camera(int id,
                   String name,
@@ -30,8 +27,7 @@ public class Camera extends AbstractEntity{
                   String imagePath,
                   Brand brand,
                   CameraType cameraType,
-                  Purpose purpose,
-                  List<Lens> compatibleLenses
+                  Purpose purpose
     ) {
         super(id, name);
         this.releaseYear = releaseYear;
@@ -44,7 +40,6 @@ public class Camera extends AbstractEntity{
         this.brand = brand;
         this.cameraType = cameraType;
         this.purpose = purpose;
-        this.compatibleLenses = compatibleLenses;
     }
 
     public int getReleaseYear() {
@@ -127,20 +122,6 @@ public class Camera extends AbstractEntity{
         this.purpose = purpose;
     }
 
-    public List<Lens> getCompatibleLenses() {
-        return List.copyOf(compatibleLenses);
-    }
-
-    public void addCompatibleLenses(Lens lens) {
-        if (lens != null && !compatibleLenses.contains(lens)) {
-            compatibleLenses.add(lens);
-        }
-    }
-
-    public void removeCompatibleLens(Lens lens) {
-        compatibleLenses.remove(lens);
-    }
-
     @Override
     public String toString() {
         return "Camera{" +
@@ -156,7 +137,6 @@ public class Camera extends AbstractEntity{
                 ", brand=" + brand +
                 ", cameraType=" + cameraType +
                 ", purpose=" + purpose +
-                ", compatibleLenses=" + compatibleLenses +
                 '}';
     }
 }

@@ -68,8 +68,9 @@ public class CameraController {
     private void setupColumns() {
         cameraTable.getColumns().setAll(
                 TableColumnFactory.create("Name", 220, Camera::getName),
-                TableColumnFactory.create("Type", 130, c -> c.getCameraType().getDisplayName()),
                 TableColumnFactory.create("Brand", 140, c -> c.getBrand() != null ? c.getBrand().getName() : "-"),
+                TableColumnFactory.create("Type", 130, c -> c.getCameraType().getDisplayName()),
+                TableColumnFactory.create("Purpose", 130, Camera::getPurpose),
                 TableColumnFactory.create("Release Year", 100, Camera::getReleaseYear),
                 TableColumnFactory.create("Price (€)", 100, Camera::getPrice)
         );
