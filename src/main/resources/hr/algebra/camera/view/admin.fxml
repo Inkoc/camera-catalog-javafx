@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="hr.algebra.camera.controller.AdminController"
+      spacing="15" style="-fx-padding: 30;">
+    <Label text="Admin — Data Import" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+    <Button fx:id="importButton" text="Import cameras from online catalog" onAction="#handleImport"/>
+    <Label fx:id="statusLabel" text=""/>
+</VBox>

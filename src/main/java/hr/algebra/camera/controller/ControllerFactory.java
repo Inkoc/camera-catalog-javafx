@@ -8,14 +8,8 @@ import hr.algebra.camera.repository.postgres.BrandRepository;
 import hr.algebra.camera.repository.postgres.CameraRepository;
 import hr.algebra.camera.repository.postgres.LensRepository;
 import hr.algebra.camera.repository.postgres.UserRepository;
-import hr.algebra.camera.service.AuthService;
-import hr.algebra.camera.service.BrandService;
-import hr.algebra.camera.service.CameraService;
-import hr.algebra.camera.service.LensService;
-import hr.algebra.camera.service.interfaces.IAuthService;
-import hr.algebra.camera.service.interfaces.IBrandService;
-import hr.algebra.camera.service.interfaces.ICameraService;
-import hr.algebra.camera.service.interfaces.ILensService;
+import hr.algebra.camera.service.*;
+import hr.algebra.camera.service.interfaces.*;
 import javafx.util.Callback;
 
 import java.lang.reflect.Constructor;
@@ -36,11 +30,13 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
         ICameraService cameraService = new CameraService(cameraRepository);
         ILensService lensService = new LensService(lensRepository);
         IBrandService brandService = new BrandService(brandRepository);
+        IDataImportService importService = new DataImportService(cameraService, brandService);
 
         dependencies.put(IAuthService.class, authService);
         dependencies.put(ICameraService.class, cameraService);
         dependencies.put(ILensService.class, lensService);
         dependencies.put(IBrandService.class, brandService);
+        dependencies.put(IDataImportService.class, importService);
     }
 
     @Override
