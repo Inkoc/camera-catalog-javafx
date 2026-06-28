@@ -1,7 +1,9 @@
 package hr.algebra.camera.controller;
 
 import hr.algebra.camera.event.EventBus;
+import hr.algebra.camera.event.events.ActionType;
 import hr.algebra.camera.event.events.DataChangedEvent;
+import hr.algebra.camera.event.events.EntityType;
 import hr.algebra.camera.model.Camera;
 import hr.algebra.camera.model.Lens;
 import hr.algebra.camera.service.interfaces.ICameraService;
@@ -120,7 +122,7 @@ public class LensAttachController {
                         cameraService.detachLens(camera.getId(), lensId);
                     }
                     reload();
-                    EventBus.getInstance().publish(new DataChangedEvent(camera.getId(), "CAMERA", attach ? "ATTACH" : "DETACH"));
+                    EventBus.getInstance().publish(new DataChangedEvent(camera.getId(), EntityType.CAMERA, attach ? ActionType.ATTACH : ActionType.DETACH));
                     success = true;
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "Failed to attach/detach lens", e);

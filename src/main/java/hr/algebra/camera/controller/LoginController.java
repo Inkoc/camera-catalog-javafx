@@ -1,7 +1,9 @@
 package hr.algebra.camera.controller;
 
 import hr.algebra.camera.event.EventBus;
+import hr.algebra.camera.event.events.ActionType;
 import hr.algebra.camera.event.events.DataChangedEvent;
+import hr.algebra.camera.event.events.EntityType;
 import hr.algebra.camera.exception.AuthenticationException;
 import hr.algebra.camera.model.User;
 import hr.algebra.camera.service.interfaces.IAuthService;
@@ -35,7 +37,7 @@ public class LoginController {
 
         try {
             User user = authService.login(username, password);
-            EventBus.getInstance().publish(new DataChangedEvent(user.getId(), "AUTH", "LOGIN"));
+            EventBus.getInstance().publish(new DataChangedEvent(user.getId(), EntityType.AUTH, ActionType.LOGIN));
             LOGGER.info(() -> "Successful login: " + username);
 
             ViewManager.switchTo(

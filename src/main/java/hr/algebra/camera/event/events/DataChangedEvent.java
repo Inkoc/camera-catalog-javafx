@@ -2,10 +2,10 @@ package hr.algebra.camera.event.events;
 
 public class DataChangedEvent {
     private final int entityId;
-    private final String entityType;
-    private final String action;
+    private final EntityType entityType;
+    private final ActionType action;
 
-    public DataChangedEvent(int entityId, String entityType, String action) {
+    public DataChangedEvent(int entityId, EntityType entityType, ActionType action) {
         this.entityId = entityId;
         this.entityType = entityType;
         this.action = action;
@@ -15,11 +15,11 @@ public class DataChangedEvent {
         return entityId;
     }
 
-    public String getEntityType() {
+    public EntityType getEntityType() {
         return entityType;
     }
 
-    public String getAction() {
+    public ActionType getAction() {
         return action;
     }
 }

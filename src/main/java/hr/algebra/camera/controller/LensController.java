@@ -2,7 +2,9 @@ package hr.algebra.camera.controller;
 
 import hr.algebra.camera.event.EventBus;
 import hr.algebra.camera.event.EventListener;
+import hr.algebra.camera.event.events.ActionType;
 import hr.algebra.camera.event.events.DataChangedEvent;
+import hr.algebra.camera.event.events.EntityType;
 import hr.algebra.camera.model.Lens;
 import hr.algebra.camera.service.interfaces.ILensService;
 import hr.algebra.camera.utils.DialogUtils;
@@ -35,7 +37,7 @@ public class LensController {
         loadLenses();
 
         EventListener eventListener = dataChangedEvent -> {
-            if ("LENS".equals(dataChangedEvent.getEntityType())) loadLenses();
+            if (dataChangedEvent.getEntityType() == EntityType.LENS) loadLenses();
         };
         EventBus.getInstance().subscribe(eventListener);
 
@@ -87,7 +89,7 @@ public class LensController {
 
         try {
             lensService.deleteById(selected.getId());
-            EventBus.getInstance().publish(new DataChangedEvent(selected.getId(), "LENS", "DELETE"));
+            EventBus.getInstance().publish(new DataChangedEvent(selected.getId(), EntityType.LENS, ActionType.DELETE));
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to delete lens", e);
             DialogUtils.error("Error", "Could not delete lens: " + e.getMessage());
@@ -101,7 +103,7 @@ public class LensController {
         );
 
         if (formController.isSaved()) {
-            EventBus.getInstance().publish(new DataChangedEvent(0, "LENS", "SAVE"));
+            EventBus.getInstance().publish(new DataChangedEvent(0, EntityType.LENS, ActionType.SAVE));
         }
     }
 }

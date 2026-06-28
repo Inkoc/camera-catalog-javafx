@@ -88,7 +88,7 @@ public class CameraFormController {
         purposeComboBox.setValue(camera.getPurpose());
         imagePath = camera.getImagePath();
         imagePreview.setImage(ImageStorage.load(imagePath));
-        imageNameLabel.setText(imagePath == null ? "(none)" : "stored image"); //TODO check
+        imageNameLabel.setText(imagePath == null ? "(none)" : "stored image");
     }
 
     public boolean isSaved() {

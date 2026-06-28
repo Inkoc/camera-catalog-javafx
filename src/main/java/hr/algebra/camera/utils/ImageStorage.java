@@ -14,9 +14,6 @@ import java.util.logging.Logger;
 public final class ImageStorage {
     private static final Logger LOGGER = Logger.getLogger(ImageStorage.class.getName());
 
-    //TODO Add config
-    private static final Path IMAGE_DIR = Path.of(System.getProperty("user.home"), ".camera-catalog", "images");
-
     private ImageStorage() {}
 
     public static String store(File source, int cameraId) {
@@ -24,7 +21,7 @@ public final class ImageStorage {
             ensureDir();
 
             String filename = cameraId + extensionOf(source.getName());
-            Files.copy(source.toPath(), IMAGE_DIR.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(source.toPath(), AppPaths.IMAGES.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
 
             return filename;
         } catch (IOException e) {
@@ -35,7 +32,7 @@ public final class ImageStorage {
     public static Image load(String filename) {
         if (filename == null || filename.isBlank()) return null;
 
-        Path path = IMAGE_DIR.resolve(filename);
+        Path path = AppPaths.IMAGES.resolve(filename);
         if (!Files.exists(path)) return null;
 
         return new Image(path.toUri().toString());
@@ -45,14 +42,14 @@ public final class ImageStorage {
         if (filename == null || filename.isBlank()) return;
 
         try {
-            Files.deleteIfExists(IMAGE_DIR.resolve(filename));
+            Files.deleteIfExists(AppPaths.IMAGES.resolve(filename));
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Failed to delete image: " + filename, e);
         }
     }
 
     private static void ensureDir() throws IOException {
-        Files.createDirectories(IMAGE_DIR);
+        Files.createDirectories(AppPaths.IMAGES);
     }
 
     private static String extensionOf(String name) {

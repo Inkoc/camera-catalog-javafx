@@ -15,17 +15,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class XmlActionLogger implements EventListener {
     private static final Logger LOGGER = Logger.getLogger(XmlActionLogger.class.getName());
-
-    //TODO Add to config
-    private static final Path FILE =
-            Path.of(System.getProperty("user.home"), ".camera-catalog", "action-log.xml");
 
     private static final XmlActionLogger INSTANCE = new XmlActionLogger();
 
@@ -52,12 +47,12 @@ public final class XmlActionLogger implements EventListener {
 
     private synchronized void append(String user, DataChangedEvent event) {
         try {
-            Files.createDirectories(FILE.getParent());
+            Files.createDirectories(AppPaths.ACTION_LOG.getParent());
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document;
 
-            if (Files.exists(FILE) && Files.size(FILE) > 0) {
-                try (java.io.InputStream in = Files.newInputStream(FILE)) {
+            if (Files.exists(AppPaths.ACTION_LOG) && Files.size(AppPaths.ACTION_LOG) > 0) {
+                try (java.io.InputStream in = Files.newInputStream(AppPaths.ACTION_LOG)) {
                     document = builder.parse(in);
                 }
             } else {
@@ -67,13 +62,13 @@ public final class XmlActionLogger implements EventListener {
             Element element = document.createElement("action");
             element.setAttribute("timestamp", LocalDateTime.now().toString());
             element.setAttribute("user", user);
-            element.setAttribute("entity", event.getEntityType());
-            element.setAttribute("type", event.getAction());
+            element.setAttribute("entity", event.getEntityType().name());
+            element.setAttribute("type", event.getAction().name());
             element.setAttribute("entityId", String.valueOf(event.getEntityId()));
             document.getDocumentElement().appendChild(element);
 
             Transformer t = TransformerFactory.newInstance().newTransformer();
-            try (java.io.OutputStream out = Files.newOutputStream(FILE)) {
+            try (java.io.OutputStream out = Files.newOutputStream(AppPaths.ACTION_LOG)) {
                 t.transform(new DOMSource(document), new StreamResult(out));
             }
         } catch (Exception e) {
