@@ -1,70 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="hr.algebra.camera.controller.CameraFormController"
-      spacing="12" prefWidth="380">
-    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-    <Label text="Camera Details" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+<VBox prefWidth="380" spacing="12" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.camera.controller.CameraFormController">
+    <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+
+    <Label style="-fx-font-size: 16; -fx-font-weight: bold;" text="Camera Details" />
 
     <GridPane hgap="10" vgap="8">
         <columnConstraints>
-            <ColumnConstraints minWidth="130"/>
-            <ColumnConstraints minWidth="210" hgrow="ALWAYS"/>
+            <ColumnConstraints minWidth="130" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="210" />
         </columnConstraints>
 
-        <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="nameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-        <Label text="Brand:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="brandComboBox" maxWidth="Infinity" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Brand:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <ComboBox fx:id="brandComboBox" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-        <Label text="Type:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="typeComboBox" maxWidth="Infinity" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <Label text="Type:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <ComboBox fx:id="typeComboBox" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-        <Label text="Purpose:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="purposeComboBox" maxWidth="Infinity" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        <Label text="Purpose:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <ComboBox fx:id="purposeComboBox" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-        <Label text="Release Year:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <TextField fx:id="releaseYearField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+        <Label text="Release Year:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <TextField fx:id="releaseYearField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-        <Label text="Megapixels:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-        <TextField fx:id="megapixelsField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+        <Label text="Megapixels:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <TextField fx:id="megapixelsField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
-        <Label text="Sensor Type:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
-        <TextField fx:id="sensorTypeField" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+        <Label text="Sensor Type:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <TextField fx:id="sensorTypeField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
-        <Label text="ISO Range:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
-        <TextField fx:id="isoRangeField" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+        <Label text="ISO Range:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+        <TextField fx:id="isoRangeField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
 
-        <Label text="Max Shooting Speed:" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
-        <TextField fx:id="maxShootingSpeedField" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+        <Label text="Max Shooting Speed:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+        <TextField fx:id="maxShootingSpeedField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 
-        <Label text="Price (€):" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
-        <TextField fx:id="priceField" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+        <Label text="Price (€):" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+        <TextField fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
 
-        <Label text="Image Path:" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
-        <TextField fx:id="imagePathField" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+        <Label text="Image Path:" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+        <TextField fx:id="imagePathField" GridPane.columnIndex="1" GridPane.rowIndex="10" />
 
-        <HBox spacing="8" GridPane.rowIndex="10" GridPane.columnIndex="1">
-            <Button text="Choose Image…" onAction="#handleChooseImage"/>
-            <Label fx:id="imageNameLabel" text="(none)" style="-fx-text-fill:#666;"/>
+        <HBox alignment="CENTER_LEFT" spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="10">
+            <Button onAction="#handleChooseImage" text="Choose Image…" />
+            <Label fx:id="imageNameLabel" style="-fx-text-fill:#666;" text="(none)" />
         </HBox>
-        <ImageView fx:id="imagePreview" fitWidth="160" fitHeight="120" preserveRatio="true"
-                   GridPane.rowIndex="11" GridPane.columnIndex="1"/>
-
+        <ImageView fx:id="imagePreview" fitHeight="120" fitWidth="160" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
     </GridPane>
 
-    <Label fx:id="errorLabel" style="-fx-text-fill: #d9534f;" wrapText="true"/>
+    <Label fx:id="errorLabel" style="-fx-text-fill: #d9534f;" wrapText="true" />
 
-    <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button text="Cancel" onAction="#handleCancel"/>
-        <Button text="Save" onAction="#handleSave" defaultButton="true"
-                style="-fx-background-color: #0e85c3; -fx-text-fill: white;"/>
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Button onAction="#handleCancel" prefHeight="25.0" prefWidth="60.0" text="Cancel" />
+        <Button defaultButton="true" onAction="#handleSave" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #0e85c3; -fx-text-fill: white;" text="Save" />
     </HBox>
 </VBox>
