@@ -7,7 +7,6 @@ module hr.algebra.camera {
     requires jbcrypt;
     requires java.desktop;
     requires jakarta.xml.bind;
-    requires java.net.http;
 
     opens hr.algebra.camera.model to javafx.base;
     opens hr.algebra.camera to javafx.fxml;

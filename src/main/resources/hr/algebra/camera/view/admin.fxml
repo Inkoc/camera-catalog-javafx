@@ -10,7 +10,9 @@
       fx:controller="hr.algebra.camera.controller.AdminController"
       spacing="15" style="-fx-padding: 30;">
     <Label text="Admin — Data Import" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
-    <Button fx:id="importButton" text="Import cameras from online catalog" onAction="#handleImport"/>
-    <Button text="Export catalog to XML" onAction="#handleExport"/>
-    <Label fx:id="statusLabel" text=""/>
+
+    <Button fx:id="importButton" text="Import catalog from XML" onAction="#handleImport"/>
+    <Button fx:id="exportButton" text="Export catalog to XML" onAction="#handleExport"/>
+
+    <Label fx:id="statusLabel"/>
 </VBox>

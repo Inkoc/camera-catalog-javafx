@@ -9,69 +9,54 @@ import hr.algebra.camera.model.enums.CameraType;
 import hr.algebra.camera.model.enums.Purpose;
 import hr.algebra.camera.service.interfaces.IBrandService;
 import hr.algebra.camera.service.interfaces.ICameraService;
-import hr.algebra.camera.service.interfaces.IDataImportService;
+import hr.algebra.camera.service.interfaces.IXmlImportService;
 import jakarta.xml.bind.JAXBContext;
 
 import java.io.InputStream;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class DataImportService implements IDataImportService {
+public class XmlImportService implements IXmlImportService {
     private final ICameraService cameraService;
     private final IBrandService brandService;
 
-    public DataImportService(ICameraService cameraService, IBrandService brandService) {
+    public XmlImportService(ICameraService cameraService, IBrandService brandService) {
         this.cameraService = cameraService;
         this.brandService = brandService;
     }
 
     @Override
-    public int importFromUrl(String url) {
-        CameraCatalogDto catalog = fetchAndParse(url);
+    public int importFromFile(Path path) {
+        try (InputStream in = Files.newInputStream(path)) {
+            return importFromStream(in);
+        } catch (DataImportException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new DataImportException("Failed to import from " + path, e);
+        }
+    }
 
+    private int importFromStream(InputStream in) throws Exception {
+        JAXBContext ctx = JAXBContext.newInstance(CameraCatalogDto.class);
+        CameraCatalogDto catalog = (CameraCatalogDto) ctx.createUnmarshaller().unmarshal(in);
         Map<String, Brand> brandsByName = brandService.findAll().stream()
                 .collect(Collectors.toMap(b -> b.getName().toLowerCase(), Function.identity()));
-
         Set<String> existingNames = cameraService.findAll().stream()
                 .map(c -> c.getName().toLowerCase())
                 .collect(Collectors.toSet());
-
         int imported = 0;
         for (CameraDto dto : catalog.getCameras()) {
-            if (existingNames.contains(dto.getName().toLowerCase())) {
-                continue;
-            }
+            if (existingNames.contains(dto.getName().toLowerCase())) continue;
             Brand brand = resolveBrand(dto.getBrand(), brandsByName);
             cameraService.save(toCamera(dto, brand));
             imported++;
         }
-
         return imported;
-    }
-
-    private CameraCatalogDto fetchAndParse(String url) {
-        try {
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder(URI.create(url)).GET().build();
-            HttpResponse<InputStream> response =
-                    client.send(request, HttpResponse.BodyHandlers.ofInputStream());
-            if (response.statusCode() != 200) {
-                throw new DataImportException("Server returned HTTP " + response.statusCode(), null);
-            }
-            JAXBContext ctx = JAXBContext.newInstance(CameraCatalogDto.class);
-            return (CameraCatalogDto) ctx.createUnmarshaller().unmarshal(response.body());
-        } catch (DataImportException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new DataImportException("Failed to fetch/parse catalog from " + url, e);
-        }
     }
 
     private Brand resolveBrand(String name, Map<String, Brand> cache) {
@@ -88,13 +73,13 @@ public class DataImportService implements IDataImportService {
         return created;
     }
 
-    private Camera toCamera(CameraDto d, Brand brand) {
+    private Camera toCamera(CameraDto cameraDto, Brand brand) {
         return new Camera(
-                0, d.getName(), d.getReleaseYear(), d.getMegapixels(),
-                d.getSensorType(), d.getIsoRange(), d.getMaxShootingSpeed(),
-                d.getPrice(), null, brand,
-                CameraType.valueOf(d.getCameraType()),
-                Purpose.valueOf(d.getPurpose()),
+                0, cameraDto.getName(), cameraDto.getReleaseYear(), cameraDto.getMegapixels(),
+                cameraDto.getSensorType(), cameraDto.getIsoRange(), cameraDto.getMaxShootingSpeed(),
+                cameraDto.getPrice(), null, brand,
+                CameraType.valueOf(cameraDto.getCameraType()),
+                Purpose.valueOf(cameraDto.getPurpose()),
                 new ArrayList<>()
         );
     }

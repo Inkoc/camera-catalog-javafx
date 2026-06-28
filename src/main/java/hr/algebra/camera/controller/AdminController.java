@@ -2,7 +2,7 @@ package hr.algebra.camera.controller;
 
 import hr.algebra.camera.event.EventBus;
 import hr.algebra.camera.event.events.DataChangedEvent;
-import hr.algebra.camera.service.interfaces.IDataImportService;
+import hr.algebra.camera.service.interfaces.IXmlImportService;
 import hr.algebra.camera.service.interfaces.IXmlExportService;
 import hr.algebra.camera.utils.DialogUtils;
 import hr.algebra.camera.utils.ThreadManager;
@@ -11,33 +11,40 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.FileChooser;
+
+import java.io.File;
 
 public class AdminController {
-    // TODO: temp solution, implement input field
-    private static final String CATALOG_URL = "https://raw.githubusercontent.com/USER/REPO/main/catalog.xml";
-
     @FXML private Label statusLabel;
     @FXML private Button importButton;
+    @FXML public Button exportButton;
 
-    private final IDataImportService importService;
+    private final IXmlImportService importService;
     private final IXmlExportService exportService;
 
-    public AdminController(IDataImportService importService, IXmlExportService exportService) {
+    public AdminController(IXmlImportService importService, IXmlExportService exportService) {
         this.importService = importService;
         this.exportService = exportService;
     }
 
     @FXML
     private void handleImport() {
+        FileChooser fc = new FileChooser();
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML files", "*.xml"));
+        File file = fc.showOpenDialog(statusLabel.getScene().getWindow());
+        if (file == null) return;
+
         importButton.setDisable(true);
         statusLabel.setText("Importing…");
 
         Task<Integer> task = new Task<>() {
             @Override
             protected Integer call() {
-                return importService.importFromUrl(CATALOG_URL);
+                return importService.importFromFile(file.toPath());
             }
         };
+
         task.setOnSucceeded(e -> {
             statusLabel.setText("Imported " + task.getValue() + " new cameras.");
             importButton.setDisable(false);
@@ -58,7 +65,9 @@ public class AdminController {
         fc.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("XML", "*.xml"));
         java.io.File file = fc.showSaveDialog(statusLabel.getScene().getWindow());
         if (file == null) return;
+
         statusLabel.setText("Exporting…");
+
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -66,11 +75,13 @@ public class AdminController {
                 return null;
             }
         };
+
         task.setOnSucceeded(e -> statusLabel.setText("Exported to " + file.getName()));
         task.setOnFailed(e -> {
             statusLabel.setText("Export failed.");
             DialogUtils.error("Export failed", String.valueOf(task.getException().getMessage()));
         });
+
         ThreadManager.run(task);
     }
 }
