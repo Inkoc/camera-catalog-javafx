@@ -15,4 +15,5 @@ module hr.algebra.camera {
     exports hr.algebra.camera.service.interfaces;
     exports hr.algebra.camera.controller;
     opens hr.algebra.camera.controller to javafx.fxml;
+    opens hr.algebra.camera.model.dto to jakarta.xml.bind;
 }
