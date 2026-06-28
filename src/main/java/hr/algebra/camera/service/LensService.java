@@ -1,5 +1,6 @@
 package hr.algebra.camera.service;
 
+import hr.algebra.camera.auth.SessionManager;
 import hr.algebra.camera.model.Lens;
 import hr.algebra.camera.repository.interfaces.ILensRepository;
 import hr.algebra.camera.service.interfaces.ILensService;
@@ -35,6 +36,8 @@ public class LensService implements ILensService {
 
     @Override
     public int save(Lens lens) {
+        SessionManager.getInstance().requireAdmin();
+
         if (lens.getPrice() < 0) {
             throw new IllegalArgumentException("Price cannot be negative");
         }
@@ -43,11 +46,15 @@ public class LensService implements ILensService {
 
     @Override
     public void update(Lens lens) {
+        SessionManager.getInstance().requireAdmin();
+
         lensRepository.update(lens);
     }
 
     @Override
     public void deleteById(int id) {
+        SessionManager.getInstance().requireAdmin();
+
         lensRepository.deleteById(id);
     }
 }

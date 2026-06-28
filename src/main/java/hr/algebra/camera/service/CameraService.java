@@ -1,5 +1,6 @@
 package hr.algebra.camera.service;
 
+import hr.algebra.camera.auth.SessionManager;
 import hr.algebra.camera.model.Camera;
 import hr.algebra.camera.model.Lens;
 import hr.algebra.camera.repository.interfaces.ICameraRepository;
@@ -29,6 +30,8 @@ public class CameraService implements ICameraService {
 
     @Override
     public int save(Camera camera) {
+        SessionManager.getInstance().requireAdmin();
+
         if (camera.getName() == null || camera.getName().isBlank()) {
             throw new IllegalArgumentException("Camera name cannot be empty");
         }
@@ -38,6 +41,8 @@ public class CameraService implements ICameraService {
 
     @Override
     public void update(Camera camera) {
+        SessionManager.getInstance().requireAdmin();
+
         if (camera.getName() == null || camera.getName().isBlank()) {
             throw new IllegalArgumentException("Camera name cannot be empty");
         }
@@ -47,6 +52,8 @@ public class CameraService implements ICameraService {
 
     @Override
     public void deleteById(int id) {
+        SessionManager.getInstance().requireAdmin();
+
         cameraRepository.deleteById(id);
     }
 
@@ -60,11 +67,15 @@ public class CameraService implements ICameraService {
 
     @Override
     public void attachLens(int cameraId, int lensId) {
+        SessionManager.getInstance().requireAdmin();
+
         cameraRepository.attachLens(cameraId, lensId);
     }
 
     @Override
     public void detachLens(int cameraId, int lensId) {
+        SessionManager.getInstance().requireAdmin();
+
         cameraRepository.detachLens(cameraId, lensId);
     }
 
@@ -75,6 +86,8 @@ public class CameraService implements ICameraService {
 
     @Override
     public void clearCatalog() {
+        SessionManager.getInstance().requireAdmin();
+
         cameraRepository.clearAllData();
     }
 }

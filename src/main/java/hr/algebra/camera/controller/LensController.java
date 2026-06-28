@@ -1,5 +1,6 @@
 package hr.algebra.camera.controller;
 
+import hr.algebra.camera.auth.SessionManager;
 import hr.algebra.camera.event.EventBus;
 import hr.algebra.camera.event.EventListener;
 import hr.algebra.camera.event.events.ActionType;
@@ -15,6 +16,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +24,7 @@ import java.util.logging.Logger;
 public class LensController {
     private static final Logger LOGGER = Logger.getLogger(LensController.class.getName());
 
+    @FXML private HBox adminBar;
     @FXML private TableView<Lens> lensTable;
 
     private final ILensService lensService;
@@ -44,6 +47,10 @@ public class LensController {
         lensTable.sceneProperty().addListener((observableValue, oldScene, newScene) -> {
             if (newScene == null) EventBus.getInstance().unsubscribe(eventListener);
         });
+
+        boolean admin = SessionManager.getInstance().isAdmin();
+        adminBar.setVisible(admin);
+        adminBar.setManaged(admin);
     }
 
     private void setupColumns() {

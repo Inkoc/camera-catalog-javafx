@@ -1,5 +1,6 @@
 package hr.algebra.camera.service;
 
+import hr.algebra.camera.auth.SessionManager;
 import hr.algebra.camera.model.Brand;
 import hr.algebra.camera.repository.interfaces.IBrandRepository;
 import hr.algebra.camera.service.interfaces.IBrandService;
@@ -27,6 +28,8 @@ public class BrandService implements IBrandService {
 
     @Override
     public int save(Brand brand) {
+        SessionManager.getInstance().requireAdmin();
+
         if (brand.getName() == null || brand.getName().isBlank()) {
             throw new IllegalArgumentException("Brand name cannot be empty");
         }
@@ -36,11 +39,15 @@ public class BrandService implements IBrandService {
 
     @Override
     public void update(Brand brand) {
+        SessionManager.getInstance().requireAdmin();
+
         brandRepository.update(brand);
     }
 
     @Override
     public void deleteById(int id) {
+        SessionManager.getInstance().requireAdmin();
+
         brandRepository.deleteById(id);
     }
 }

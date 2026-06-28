@@ -1,5 +1,6 @@
 package hr.algebra.camera.auth;
 
+import hr.algebra.camera.exception.AccessDeniedException;
 import hr.algebra.camera.model.User;
 import hr.algebra.camera.model.enums.UserRole;
 
@@ -31,5 +32,11 @@ public class SessionManager {
 
     public boolean isAuthenticated() {
         return currentUser != null;
+    }
+
+    public void requireAdmin() {
+        if (!isAdmin()) {
+            throw new AccessDeniedException("Administrator privileges required.");
+        }
     }
 }

@@ -11,7 +11,7 @@
     <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
     <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="Lens Management" />
     <TableView fx:id="lensTable" VBox.vgrow="ALWAYS" />
-    <HBox alignment="CENTER_LEFT" spacing="10">
+    <HBox fx:id="adminBar" alignment="CENTER_LEFT" spacing="10">
         <Button onAction="#handleAddLens" style="-fx-background-color: #0e85c3; -fx-text-fill: white;" text="Add New Lens" textAlignment="CENTER" />
         <Button onAction="#handleEditLens" style="-fx-background-color: #5bc0de; -fx-text-fill: white;" text="Edit Selected" textAlignment="CENTER" />
         <Button onAction="#handleDeleteLens" style="-fx-background-color: #d9534f; -fx-text-fill: white;" text="Delete Selected" textAlignment="CENTER" />

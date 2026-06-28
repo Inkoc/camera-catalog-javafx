@@ -1,5 +1,6 @@
 package hr.algebra.camera.controller;
 
+import hr.algebra.camera.auth.SessionManager;
 import hr.algebra.camera.event.EventBus;
 import hr.algebra.camera.event.EventListener;
 import hr.algebra.camera.event.events.ActionType;
@@ -21,6 +22,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 
 import java.util.function.Predicate;
 import java.util.logging.Level;
@@ -30,6 +32,7 @@ public class CameraController {
     private static final Logger LOGGER = Logger.getLogger(CameraController.class.getName());
     private static final String NO_SELECTION = "No Selection";
 
+    @FXML private HBox adminBar;
     @FXML private TextField searchField;
     @FXML private ComboBox<CameraType> typeFilter;
     @FXML private ComboBox<Purpose> purposeFilter;
@@ -65,6 +68,10 @@ public class CameraController {
         cameraTable.sceneProperty().addListener((observableValue, oldScene, newScene) -> {
             if (newScene == null) EventBus.getInstance().unsubscribe(eventListener);
         });
+
+        boolean admin = SessionManager.getInstance().isAdmin();
+        adminBar.setVisible(admin);
+        adminBar.setManaged(admin);
     }
 
     private void setupColumns() {

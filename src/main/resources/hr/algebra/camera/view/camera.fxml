@@ -29,7 +29,7 @@
         </VBox>
     </HBox>
 
-    <HBox alignment="CENTER_LEFT" spacing="10">
+    <HBox fx:id="adminBar" alignment="CENTER_LEFT" spacing="10">
         <Button onAction="#handleAddCamera" style="-fx-background-color: #0e85c3; -fx-text-fill: white;" text="Add New Camera" />
         <Button onAction="#handleEditCamera" style="-fx-background-color: #5bc0de; -fx-text-fill: white;" text="Edit Selected" />
         <Button onAction="#handleDeleteCamera" style="-fx-background-color: #d9534f; -fx-text-fill: white;" text="Delete Selected" />
