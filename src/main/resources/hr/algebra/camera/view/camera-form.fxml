@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
+<?import javafx.scene.image.ImageView?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="hr.algebra.camera.controller.CameraFormController"
       spacing="12" prefWidth="380">
@@ -49,6 +50,14 @@
 
         <Label text="Image Path:" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
         <TextField fx:id="imagePathField" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+
+        <HBox spacing="8" GridPane.rowIndex="10" GridPane.columnIndex="1">
+            <Button text="Choose Image…" onAction="#handleChooseImage"/>
+            <Label fx:id="imageNameLabel" text="(none)" style="-fx-text-fill:#666;"/>
+        </HBox>
+        <ImageView fx:id="imagePreview" fitWidth="160" fitHeight="120" preserveRatio="true"
+                   GridPane.rowIndex="11" GridPane.columnIndex="1"/>
+
     </GridPane>
 
     <Label fx:id="errorLabel" style="-fx-text-fill: #d9534f;" wrapText="true"/>

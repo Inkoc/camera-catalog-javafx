@@ -2,6 +2,7 @@ package hr.algebra.camera.controller;
 
 import hr.algebra.camera.model.Camera;
 import hr.algebra.camera.service.interfaces.ICameraService;
+import hr.algebra.camera.utils.ImageStorage;
 import hr.algebra.camera.utils.TableColumnFactory;
 import hr.algebra.camera.utils.ViewManager;
 import javafx.collections.FXCollections;
@@ -10,8 +11,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableView;
+import javafx.scene.image.ImageView;
 
 public class CameraController {
+    @FXML private ImageView imagePreview;
     @FXML private TableView<Camera> cameraTable;
 
     private final ICameraService cameraService;
@@ -25,6 +28,8 @@ public class CameraController {
     public void initialize() {
         setupColumns();
         loadCameras();
+        cameraTable.getSelectionModel().selectedItemProperty().addListener((obs, old, sel) ->
+                imagePreview.setImage(sel == null ? null : ImageStorage.load(sel.getImagePath())));
     }
 
     private void setupColumns() {
@@ -66,6 +71,7 @@ public class CameraController {
 
         try {
             cameraService.deleteById(selected.getId());
+            ImageStorage.delete(selected.getImagePath());
             loadCameras();
         } catch (Exception e) {
             showAlert("Error", "Could not delete camera: " + e.getMessage());

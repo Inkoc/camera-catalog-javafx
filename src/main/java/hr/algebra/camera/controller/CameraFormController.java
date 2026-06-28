@@ -6,18 +6,23 @@ import hr.algebra.camera.model.enums.CameraType;
 import hr.algebra.camera.model.enums.Purpose;
 import hr.algebra.camera.service.interfaces.IBrandService;
 import hr.algebra.camera.service.interfaces.ICameraService;
+import hr.algebra.camera.utils.ImageStorage;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class CameraFormController {
-
     @FXML private TextField nameField;
     @FXML private TextField releaseYearField;
     @FXML private TextField megapixelsField;
@@ -25,17 +30,20 @@ public class CameraFormController {
     @FXML private TextField isoRangeField;
     @FXML private TextField maxShootingSpeedField;
     @FXML private TextField priceField;
-    @FXML private TextField imagePathField;
     @FXML private ComboBox<Brand> brandComboBox;
     @FXML private ComboBox<CameraType> typeComboBox;
     @FXML private ComboBox<Purpose> purposeComboBox;
     @FXML private Label errorLabel;
+    @FXML private Label imageNameLabel;
+    @FXML private ImageView imagePreview;
 
     private final ICameraService cameraService;
     private final IBrandService brandService;
 
     private Camera editing;
     private boolean saved = false;
+    private String imagePath;
+    private File pickedImage;
 
     public CameraFormController(ICameraService cameraService, IBrandService brandService) {
         this.cameraService = cameraService;
@@ -72,10 +80,12 @@ public class CameraFormController {
         isoRangeField.setText(camera.getIsoRange());
         maxShootingSpeedField.setText(String.valueOf(camera.getMaxShootingSpeed()));
         priceField.setText(String.valueOf(camera.getPrice()));
-        imagePathField.setText(camera.getImagePath());
         brandComboBox.setValue(camera.getBrand());
         typeComboBox.setValue(camera.getCameraType());
         purposeComboBox.setValue(camera.getPurpose());
+        imagePath = camera.getImagePath();
+        imagePreview.setImage(ImageStorage.load(imagePath));
+        imageNameLabel.setText(imagePath == null ? "(none)" : "stored image"); //TODO check
     }
 
     public boolean isSaved() {
@@ -90,9 +100,16 @@ public class CameraFormController {
         }
         try {
             Camera camera = buildFromForm();
-            if (editing == null) {
-                cameraService.save(camera);
-            } else {
+            boolean isNew = (editing == null);
+            int id = isNew ? cameraService.save(camera) : editing.getId();
+
+            if (pickedImage != null) {
+                ImageStorage.delete(camera.getImagePath());
+                String filename = ImageStorage.store(pickedImage, id);
+                camera.setId(id);
+                camera.setImagePath(filename);
+                cameraService.update(camera);
+            } else if (!isNew) {
                 cameraService.update(camera);
             }
             saved = true;
@@ -120,7 +137,7 @@ public class CameraFormController {
                 isoRangeField.getText(),
                 Integer.parseInt(maxShootingSpeedField.getText().trim()),
                 Double.parseDouble(priceField.getText().trim()),
-                imagePathField.getText(),
+                imagePath,
                 brandComboBox.getValue(),
                 typeComboBox.getValue(),
                 purposeComboBox.getValue(),
@@ -130,5 +147,17 @@ public class CameraFormController {
 
     private void close() {
         ((Stage) nameField.getScene().getWindow()).close();
+    }
+
+    public void handleChooseImage(ActionEvent actionEvent) {
+        FileChooser fc = new FileChooser();
+        fc.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
+        File file = fc.showOpenDialog(nameField.getScene().getWindow());
+        if (file != null) {
+            pickedImage = file;
+            imageNameLabel.setText(file.getName());
+            imagePreview.setImage(new Image(file.toURI().toString()));
+        }
     }
 }
