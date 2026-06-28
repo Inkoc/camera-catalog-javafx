@@ -61,7 +61,7 @@ public final class XmlActionLogger implements EventListener {
                     document = builder.parse(in);
                 }
             } else {
-                document = builder.parse(FILE.toFile());
+                document = builder.newDocument();
                 document.appendChild(document.createElement("actionLog"));
             }
             Element element = document.createElement("action");
@@ -72,7 +72,6 @@ public final class XmlActionLogger implements EventListener {
             element.setAttribute("entityId", String.valueOf(event.getEntityId()));
             document.getDocumentElement().appendChild(element);
 
-            //TODO nicer print
             Transformer t = TransformerFactory.newInstance().newTransformer();
             try (java.io.OutputStream out = Files.newOutputStream(FILE)) {
                 t.transform(new DOMSource(document), new StreamResult(out));
