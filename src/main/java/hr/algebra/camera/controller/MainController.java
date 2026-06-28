@@ -2,6 +2,7 @@ package hr.algebra.camera.controller;
 
 import hr.algebra.camera.auth.SessionManager;
 import hr.algebra.camera.utils.ConfigurationManager;
+import hr.algebra.camera.utils.DialogUtils;
 import hr.algebra.camera.utils.ViewManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,9 +14,7 @@ public class MainController {
     @FXML
     private BorderPane rootPane;
 
-    public MainController() {
-
-    }
+    public MainController() { }
 
     @FXML
     public void handleCameras(ActionEvent actionEvent) {
@@ -24,15 +23,16 @@ public class MainController {
 
     @FXML
     public void handleLenses(ActionEvent actionEvent) {
+        rootPane.setCenter(ViewManager.load("lens.fxml"));
     }
 
     @FXML
     public void handleAdmin(ActionEvent actionEvent) {
         if (!SessionManager.getInstance().isAdmin()) {
-            showAlert("Forbidden", "Only administrators can access this view.");
+            DialogUtils.warn("Forbidden", "Only administrators can access this view.");
             return;
         }
-        showAlert("Admin", "Admin loading...");
+        rootPane.setCenter(ViewManager.load("admin.fxml"));
     }
 
     @FXML
