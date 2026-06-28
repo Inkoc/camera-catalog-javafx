@@ -92,8 +92,4 @@ public final class ViewManager {
             throw new IllegalStateException("ViewManager was never initialized");
         }
     }
-
-
-
-
 }

@@ -3,12 +3,15 @@ package hr.algebra.camera.service;
 import hr.algebra.camera.exception.DataImportException;
 import hr.algebra.camera.model.Brand;
 import hr.algebra.camera.model.Camera;
+import hr.algebra.camera.model.Lens;
 import hr.algebra.camera.model.dto.CameraCatalogDto;
 import hr.algebra.camera.model.dto.CameraDto;
+import hr.algebra.camera.model.dto.LensDto;
 import hr.algebra.camera.model.enums.CameraType;
 import hr.algebra.camera.model.enums.Purpose;
 import hr.algebra.camera.service.interfaces.IBrandService;
 import hr.algebra.camera.service.interfaces.ICameraService;
+import hr.algebra.camera.service.interfaces.ILensService;
 import hr.algebra.camera.service.interfaces.IXmlImportService;
 import jakarta.xml.bind.JAXBContext;
 
@@ -23,10 +26,12 @@ import java.util.stream.Collectors;
 public class XmlImportService implements IXmlImportService {
     private final ICameraService cameraService;
     private final IBrandService brandService;
+    private final ILensService lensService;
 
-    public XmlImportService(ICameraService cameraService, IBrandService brandService) {
+    public XmlImportService(ICameraService cameraService, IBrandService brandService, ILensService lensService) {
         this.cameraService = cameraService;
         this.brandService = brandService;
+        this.lensService = lensService;
     }
 
     @Override
@@ -43,16 +48,29 @@ public class XmlImportService implements IXmlImportService {
     private int importFromStream(InputStream in) throws Exception {
         JAXBContext ctx = JAXBContext.newInstance(CameraCatalogDto.class);
         CameraCatalogDto catalog = (CameraCatalogDto) ctx.createUnmarshaller().unmarshal(in);
+
         Map<String, Brand> brandsByName = brandService.findAll().stream()
                 .collect(Collectors.toMap(b -> b.getName().toLowerCase(), Function.identity()));
+        Map<String, Lens> lensesByName = lensService.findAll().stream()
+                .collect(Collectors.toMap(l -> l.getName().toLowerCase(), Function.identity()));
         Set<String> existingNames = cameraService.findAll().stream()
                 .map(c -> c.getName().toLowerCase())
                 .collect(Collectors.toSet());
+
         int imported = 0;
         for (CameraDto dto : catalog.getCameras()) {
             if (existingNames.contains(dto.getName().toLowerCase())) continue;
+
             Brand brand = resolveBrand(dto.getBrand(), brandsByName);
-            cameraService.save(toCamera(dto, brand));
+            int cameraId = cameraService.save(toCamera(dto, brand));
+
+            if (dto.getLenses() != null) {
+                for (LensDto lensDto : dto.getLenses()) {
+                    Lens lens = resolveLens(lensDto, lensesByName);
+                    cameraService.attachLens(cameraId, lens.getId());
+                }
+            }
+
             imported++;
         }
         return imported;
@@ -68,6 +86,20 @@ public class XmlImportService implements IXmlImportService {
 
         Brand created = new Brand(id, name, null);
         cache.put(name.toLowerCase(), created);
+
+        return created;
+    }
+
+    private Lens resolveLens(LensDto lensDto, Map<String, Lens> cache) {
+        Lens existing = cache.get(lensDto.getName().toLowerCase());
+        if (existing != null) return existing;
+
+        int id = lensService.save(new Lens(0, lensDto.getName(), lensDto.getFocalLength(),
+                lensDto.getAperture(), lensDto.getMountType(), lensDto.getPrice()));
+
+        Lens created = new Lens(id, lensDto.getName(), lensDto.getFocalLength(),
+                lensDto.getAperture(), lensDto.getMountType(), lensDto.getPrice());
+        cache.put(lensDto.getName().toLowerCase(), created);
 
         return created;
     }

@@ -16,10 +16,10 @@ import java.util.logging.Logger;
 public class RegisterController {
     private static final Logger LOGGER = Logger.getLogger(RegisterController.class.getName());
 
-    @FXML public PasswordField confirmPasswordField;
-    @FXML public TextField usernameField;
-    @FXML public PasswordField passwordField;
-    @FXML public Label errorLabel;
+    @FXML private PasswordField confirmPasswordField;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private Label errorLabel;
 
     private final IAuthService authService;
 

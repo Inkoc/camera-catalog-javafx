@@ -123,7 +123,7 @@ public class CameraRepository implements ICameraRepository {
     @Override
     public List<Lens> findLensesForCamera(int cameraId) {
         List<Lens> lenses = new ArrayList<>();
-        try (Connection connection = PostgresConnection.getInstance().getConnection(); PreparedStatement statement = connection.prepareCall(LENSES_FOR)) {
+        try (Connection connection = PostgresConnection.getInstance().getConnection(); PreparedStatement statement = connection.prepareStatement(LENSES_FOR)) {
             statement.setInt(1, cameraId);
             try (ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {

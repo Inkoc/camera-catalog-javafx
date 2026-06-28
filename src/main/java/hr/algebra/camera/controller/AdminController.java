@@ -26,16 +26,16 @@ public class AdminController {
 
     @FXML private Label statusLabel;
     @FXML private Button importButton;
-    @FXML public Button exportButton;
+    @FXML private Button exportButton;
 
     private final IXmlImportService importService;
     private final IXmlExportService exportService;
     private final ICameraService cameraService;
 
-    public AdminController(IXmlImportService importService, IXmlExportService exportService, ICameraService cameraService, ICameraService cameraService1) {
+    public AdminController(IXmlImportService importService, IXmlExportService exportService, ICameraService cameraService) {
         this.importService = importService;
         this.exportService = exportService;
-        this.cameraService = cameraService1;
+        this.cameraService = cameraService;
     }
 
     @FXML

@@ -30,7 +30,7 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
         ICameraService cameraService = new CameraService(cameraRepository);
         ILensService lensService = new LensService(lensRepository);
         IBrandService brandService = new BrandService(brandRepository);
-        IXmlImportService importService = new XmlImportService(cameraService, brandService);
+        IXmlImportService importService = new XmlImportService(cameraService, brandService, lensService);
         IXmlExportService exportService = new XmlExportService(cameraService);
 
         dependencies.put(IAuthService.class, authService);

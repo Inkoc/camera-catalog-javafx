@@ -21,7 +21,7 @@ public class LensFormController {
     @FXML private Label errorLabel;
 
     private final ILensService lensService;
-    private Lens editing;          // null => add mode
+    private Lens editing;
     private boolean saved = false;
 
     public LensFormController(ILensService lensService) {
