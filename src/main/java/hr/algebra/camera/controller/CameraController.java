@@ -1,5 +1,8 @@
 package hr.algebra.camera.controller;
 
+import hr.algebra.camera.event.EventBus;
+import hr.algebra.camera.event.EventListener;
+import hr.algebra.camera.event.events.DataChangedEvent;
 import hr.algebra.camera.model.Camera;
 import hr.algebra.camera.service.interfaces.ICameraService;
 import hr.algebra.camera.utils.ImageStorage;
@@ -30,6 +33,15 @@ public class CameraController {
         loadCameras();
         cameraTable.getSelectionModel().selectedItemProperty().addListener((obs, old, sel) ->
                 imagePreview.setImage(sel == null ? null : ImageStorage.load(sel.getImagePath())));
+
+        EventListener eventListener = dataChangedEvent -> {
+            if ("CAMERA".equals(dataChangedEvent.getEntityType())) loadCameras();
+        };
+        EventBus.getInstance().subscribe(eventListener);
+
+        cameraTable.sceneProperty().addListener((observableValue, oldScene, newScene) -> {
+            if (newScene == null) EventBus.getInstance().unsubscribe(eventListener);
+        });
     }
 
     private void setupColumns() {
@@ -72,7 +84,7 @@ public class CameraController {
         try {
             cameraService.deleteById(selected.getId());
             ImageStorage.delete(selected.getImagePath());
-            loadCameras();
+            EventBus.getInstance().publish(new DataChangedEvent("CAMERA", selected.getId()));
         } catch (Exception e) {
             showAlert("Error", "Could not delete camera: " + e.getMessage());
         }
@@ -86,7 +98,7 @@ public class CameraController {
         );
 
         if (formController.isSaved()) {
-            loadCameras();
+            EventBus.getInstance().publish(new DataChangedEvent("CAMERA", 0));
         }
     }
 

@@ -1,5 +1,7 @@
 package hr.algebra.camera.controller;
 
+import hr.algebra.camera.event.EventBus;
+import hr.algebra.camera.event.events.DataChangedEvent;
 import hr.algebra.camera.model.Camera;
 import hr.algebra.camera.model.Lens;
 import hr.algebra.camera.service.interfaces.ICameraService;
@@ -108,9 +110,13 @@ public class LensAttachController {
             if (db.hasString()) {
                 int lensId = Integer.parseInt(db.getString());
                 try {
-                    if (attach) cameraService.attachLens(camera.getId(), lensId);
-                    else        cameraService.detachLens(camera.getId(), lensId);
+                    if (attach) {
+                        cameraService.attachLens(camera.getId(), lensId);
+                    } else {
+                        cameraService.detachLens(camera.getId(), lensId);
+                    }
                     reload();
+                    EventBus.getInstance().publish(new DataChangedEvent("CAMERA", camera.getId()));
                     success = true;
                 } catch (Exception ex) {
                     DialogUtils.error("Error", ex.getMessage());

@@ -1,5 +1,8 @@
 package hr.algebra.camera.controller;
 
+import hr.algebra.camera.event.EventBus;
+import hr.algebra.camera.event.EventListener;
+import hr.algebra.camera.event.events.DataChangedEvent;
 import hr.algebra.camera.model.Lens;
 import hr.algebra.camera.service.interfaces.ILensService;
 import hr.algebra.camera.utils.DialogUtils;
@@ -25,6 +28,15 @@ public class LensController {
     public void initialize() {
         setupColumns();
         loadLenses();
+
+        EventListener eventListener = dataChangedEvent -> {
+            if ("LENS".equals(dataChangedEvent.getEntityType())) loadLenses();
+        };
+        EventBus.getInstance().subscribe(eventListener);
+
+        lensTable.sceneProperty().addListener((observableValue, oldScene, newScene) -> {
+            if (newScene == null) EventBus.getInstance().unsubscribe(eventListener);
+        });
     }
 
     private void setupColumns() {
@@ -67,7 +79,7 @@ public class LensController {
 
         try {
             lensService.deleteById(selected.getId());
-            loadLenses();
+            EventBus.getInstance().publish(new DataChangedEvent("LENS", selected.getId()));
         } catch (Exception e) {
             DialogUtils.error("Error", "Could not delete lens: " + e.getMessage());
         }
@@ -80,7 +92,7 @@ public class LensController {
         );
 
         if (formController.isSaved()) {
-            loadLenses();
+            EventBus.getInstance().publish(new DataChangedEvent("LENS", 0));
         }
     }
 }
