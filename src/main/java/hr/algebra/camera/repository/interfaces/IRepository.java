@@ -1,4 +1,4 @@
-package hr.algebra.camera.repository;
+package hr.algebra.camera.repository.interfaces;
 
 import java.util.List;
 import java.util.Optional;

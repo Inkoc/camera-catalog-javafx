@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class PostgresConnection {
-    private static PostgresConnection INSTANCE;
+    private static PostgresConnection instance;
 
     private final String url;
     private final String username;
@@ -21,10 +21,10 @@ public class PostgresConnection {
     }
 
     public static synchronized PostgresConnection getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new PostgresConnection();
+        if (instance == null) {
+            instance = new PostgresConnection();
         }
-        return INSTANCE;
+        return instance;
     }
 
     public Connection getConnection() {

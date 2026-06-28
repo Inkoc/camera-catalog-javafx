@@ -2,7 +2,7 @@ package hr.algebra.camera.repository.postgres;
 
 import hr.algebra.camera.exception.DatabaseOperationException;
 import hr.algebra.camera.model.Brand;
-import hr.algebra.camera.repository.IBrandRepository;
+import hr.algebra.camera.repository.interfaces.IBrandRepository;
 
 import java.sql.*;
 import java.util.ArrayList;

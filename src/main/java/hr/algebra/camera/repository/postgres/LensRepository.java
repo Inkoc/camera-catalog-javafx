@@ -2,7 +2,7 @@ package hr.algebra.camera.repository.postgres;
 
 import hr.algebra.camera.exception.DatabaseOperationException;
 import hr.algebra.camera.model.Lens;
-import hr.algebra.camera.repository.ILensRepository;
+import hr.algebra.camera.repository.interfaces.ILensRepository;
 
 import java.sql.*;
 import java.util.ArrayList;

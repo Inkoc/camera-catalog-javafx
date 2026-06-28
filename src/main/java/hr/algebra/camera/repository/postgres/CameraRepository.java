@@ -6,8 +6,8 @@ import hr.algebra.camera.model.Camera;
 import hr.algebra.camera.model.Lens;
 import hr.algebra.camera.model.enums.CameraType;
 import hr.algebra.camera.model.enums.Purpose;
-import hr.algebra.camera.repository.ICameraRepository;
-import hr.algebra.camera.repository.IRepository;
+import hr.algebra.camera.repository.interfaces.ICameraRepository;
+import hr.algebra.camera.repository.interfaces.IRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
