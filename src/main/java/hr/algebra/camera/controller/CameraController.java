@@ -4,6 +4,8 @@ import hr.algebra.camera.event.EventBus;
 import hr.algebra.camera.event.EventListener;
 import hr.algebra.camera.event.events.DataChangedEvent;
 import hr.algebra.camera.model.Camera;
+import hr.algebra.camera.model.enums.CameraType;
+import hr.algebra.camera.model.enums.Purpose;
 import hr.algebra.camera.service.interfaces.ICameraService;
 import hr.algebra.camera.utils.ImageStorage;
 import hr.algebra.camera.utils.TableColumnFactory;
@@ -13,10 +15,17 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
+import java.util.function.Predicate;
+
 public class CameraController {
+    @FXML private TextField searchField;
+    @FXML private ComboBox<CameraType> typeFilter;
+    @FXML private ComboBox<Purpose> purposeFilter;
     @FXML private ImageView imagePreview;
     @FXML private TableView<Camera> cameraTable;
 
@@ -30,12 +39,19 @@ public class CameraController {
     @FXML
     public void initialize() {
         setupColumns();
-        loadCameras();
+        typeFilter.getItems().setAll(CameraType.values());
+        purposeFilter.getItems().setAll(Purpose.values());
+
+        searchField.textProperty().addListener((o, a, b) -> applyFilter());
+        typeFilter.valueProperty().addListener((o, a, b) -> applyFilter());
+        purposeFilter.valueProperty().addListener((o, a, b) -> applyFilter());
+        applyFilter();
+
         cameraTable.getSelectionModel().selectedItemProperty().addListener((obs, old, sel) ->
                 imagePreview.setImage(sel == null ? null : ImageStorage.load(sel.getImagePath())));
 
         EventListener eventListener = dataChangedEvent -> {
-            if ("CAMERA".equals(dataChangedEvent.getEntityType())) loadCameras();
+            if ("CAMERA".equals(dataChangedEvent.getEntityType())) applyFilter();
         };
         EventBus.getInstance().subscribe(eventListener);
 
@@ -54,8 +70,15 @@ public class CameraController {
         );
     }
 
-    private void loadCameras() {
-        cameraList.setAll(cameraService.findAll());
+    private void applyFilter() {
+        String q = searchField.getText() == null ? "" : searchField.getText().trim().toLowerCase();
+        CameraType type = typeFilter.getValue();
+        Purpose purpose = purposeFilter.getValue();
+        Predicate<Camera> predicate = c ->
+                (q.isEmpty() || c.getName().toLowerCase().contains(q))
+                        && (type == null || c.getCameraType() == type)
+                        && (purpose == null || c.getPurpose() == purpose);
+        cameraList.setAll(cameraService.filterCameras(predicate));
         cameraTable.setItems(cameraList);
     }
 
@@ -121,5 +144,12 @@ public class CameraController {
                 "Attach Lenses",
                 (LensAttachController c) -> c.setCamera(selected)
         );
+    }
+
+    public void handleClearFilters(ActionEvent actionEvent) {
+        searchField.clear();
+        typeFilter.setValue(null);
+        purposeFilter.setValue(null);
+        applyFilter();
     }
 }

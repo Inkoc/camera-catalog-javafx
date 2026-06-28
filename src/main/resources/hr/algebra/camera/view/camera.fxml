@@ -13,6 +13,13 @@
     <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
     <Label text="Camera Management" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Search by name…" prefWidth="220"/>
+        <ComboBox fx:id="typeFilter" promptText="Any type"/>
+        <ComboBox fx:id="purposeFilter" promptText="Any purpose"/>
+        <Button text="Clear" onAction="#handleClearFilters"/>
+    </HBox>
+
     <HBox spacing="12" VBox.vgrow="ALWAYS">
         <TableView fx:id="cameraTable" HBox.hgrow="ALWAYS"/>
         <VBox spacing="6" prefWidth="220">
