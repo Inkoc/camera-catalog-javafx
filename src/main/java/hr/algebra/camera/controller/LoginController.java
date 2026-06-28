@@ -4,6 +4,7 @@ import hr.algebra.camera.event.EventBus;
 import hr.algebra.camera.event.events.DataChangedEvent;
 import hr.algebra.camera.exception.AuthenticationException;
 import hr.algebra.camera.model.User;
+import hr.algebra.camera.service.XmlImportService;
 import hr.algebra.camera.service.interfaces.IAuthService;
 import hr.algebra.camera.utils.ConfigurationManager;
 import hr.algebra.camera.utils.ViewManager;
@@ -12,7 +13,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class LoginController {
+    private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
+
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Label errorLabel;
@@ -23,6 +29,7 @@ public class LoginController {
         this.authService = authService;
     }
 
+    @FXML
     public void handleLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -30,7 +37,7 @@ public class LoginController {
         try {
             User user = authService.login(username, password);
             EventBus.getInstance().publish(new DataChangedEvent(user.getId(), "AUTH", "LOGIN"));
-            System.out.println("Successful login: " + user.getName());
+            LOGGER.info(() -> "Successful login: " + username);
 
             ViewManager.switchTo(
                     "main.fxml",
@@ -38,6 +45,7 @@ public class LoginController {
             );
 
         } catch (AuthenticationException e) {
+            LOGGER.info(() -> "Failed login attempt for user: " + username);
             errorLabel.setText("Error: " + e.getMessage());
         }
     }

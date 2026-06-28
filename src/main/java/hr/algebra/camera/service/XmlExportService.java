@@ -37,7 +37,6 @@ public class XmlExportService implements IXmlExportService {
                 marshaller.marshal(catalog, out);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new DataImportException("Failed to export catalog to " + file, e);
         }
     }

@@ -17,8 +17,12 @@ import javax.xml.transform.stream.StreamResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class XmlActionLogger implements EventListener {
+    private static final Logger LOGGER = Logger.getLogger(XmlActionLogger.class.getName());
+
     //TODO Add to config
     private static final Path FILE =
             Path.of(System.getProperty("user.home"), ".camera-catalog", "action-log.xml");
@@ -74,7 +78,7 @@ public final class XmlActionLogger implements EventListener {
                 t.transform(new DOMSource(document), new StreamResult(out));
             }
         } catch (Exception e) {
-            System.err.println("Failed to write action log: " + e.getMessage());
+            LOGGER.log(Level.WARNING, "Failed to write action log: ", e);
         }
     }
 }

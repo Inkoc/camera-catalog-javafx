@@ -14,10 +14,15 @@ import javafx.stage.Stage;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class CameraApplication extends Application {
+    private static final Logger LOGGER = Logger.getLogger(CameraApplication.class.getName());
+
     @Override
     public void start(Stage stage) {
+        LOGGER.info("Camera application starting");
+
         ConfigurationManager.load();
         EventBus.getInstance().subscribe(XmlActionLogger.getInstance());
         seedDefaultAdmin();
@@ -27,6 +32,7 @@ public class CameraApplication extends Application {
 
     @Override
     public void stop() throws Exception {
+        LOGGER.info("Application shutting down");
         ThreadManager.shutdown();
     }
 

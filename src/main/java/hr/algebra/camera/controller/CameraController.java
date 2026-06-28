@@ -21,8 +21,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CameraController {
+    private static final Logger LOGGER = Logger.getLogger(CameraController.class.getName());
+
     @FXML private TextField searchField;
     @FXML private ComboBox<CameraType> typeFilter;
     @FXML private ComboBox<Purpose> purposeFilter;
@@ -81,11 +85,12 @@ public class CameraController {
         cameraList.setAll(cameraService.filterCameras(predicate));
         cameraTable.setItems(cameraList);
     }
-
+    @FXML
     public void handleAddCamera(ActionEvent actionEvent) {
         openForm(null);
     }
 
+    @FXML
     public void handleEditCamera(ActionEvent actionEvent) {
         Camera selected = cameraTable.getSelectionModel().getSelectedItem();
 
@@ -97,6 +102,7 @@ public class CameraController {
         openForm(selected);
     }
 
+    @FXML
     public void handleDeleteCamera(ActionEvent actionEvent) {
         Camera selected = cameraTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
@@ -109,8 +115,31 @@ public class CameraController {
             ImageStorage.delete(selected.getImagePath());
             EventBus.getInstance().publish(new DataChangedEvent(selected.getId(), "CAMERA", "DELETE"));
         } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to delete camera", e);
             showAlert("Error", "Could not delete camera: " + e.getMessage());
         }
+    }
+
+    @FXML
+    public void handleAttachLens(ActionEvent actionEvent) {
+        Camera selected = cameraTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("No Selection", "Please select a camera to attach lenses to.");
+            return;
+        }
+        ViewManager.openModal(
+                "lens-attach.fxml",
+                "Attach Lenses",
+                (LensAttachController c) -> c.setCamera(selected)
+        );
+    }
+
+    @FXML
+    public void handleClearFilters(ActionEvent actionEvent) {
+        searchField.clear();
+        typeFilter.setValue(null);
+        purposeFilter.setValue(null);
+        applyFilter();
     }
 
     private void openForm(Camera camera) {
@@ -131,25 +160,5 @@ public class CameraController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    public void handleAttachLens(ActionEvent actionEvent) {
-        Camera selected = cameraTable.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("No Selection", "Please select a camera to attach lenses to.");
-            return;
-        }
-        ViewManager.openModal(
-                "lens-attach.fxml",
-                "Attach Lenses",
-                (LensAttachController c) -> c.setCamera(selected)
-        );
-    }
-
-    public void handleClearFilters(ActionEvent actionEvent) {
-        searchField.clear();
-        typeFilter.setValue(null);
-        purposeFilter.setValue(null);
-        applyFilter();
     }
 }

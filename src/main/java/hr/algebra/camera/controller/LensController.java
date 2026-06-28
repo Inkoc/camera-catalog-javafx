@@ -14,7 +14,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class LensController {
+    private static final Logger LOGGER = Logger.getLogger(LensController.class.getName());
+
     @FXML private TableView<Lens> lensTable;
 
     private final ILensService lensService;
@@ -54,10 +59,12 @@ public class LensController {
         lensTable.setItems(lensList);
     }
 
+    @FXML
     public void handleAddLens(ActionEvent actionEvent) {
         openForm(null);
     }
 
+    @FXML
     public void handleEditLens(ActionEvent actionEvent) {
         Lens selected = lensTable.getSelectionModel().getSelectedItem();
 
@@ -69,6 +76,7 @@ public class LensController {
         openForm(selected);
     }
 
+    @FXML
     public void handleDeleteLens(ActionEvent actionEvent) {
         Lens selected = lensTable.getSelectionModel().getSelectedItem();
 
@@ -81,6 +89,7 @@ public class LensController {
             lensService.deleteById(selected.getId());
             EventBus.getInstance().publish(new DataChangedEvent(selected.getId(), "LENS", "DELETE"));
         } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to delete lens", e);
             DialogUtils.error("Error", "Could not delete lens: " + e.getMessage());
         }
     }

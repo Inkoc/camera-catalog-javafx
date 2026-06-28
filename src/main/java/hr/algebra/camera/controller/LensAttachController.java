@@ -20,9 +20,13 @@ import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class LensAttachController {
+    private static final Logger LOGGER = Logger.getLogger(LensAttachController.class.getName());
+
     @FXML public Label titleLabel;
     @FXML public ListView availableList;
     @FXML public ListView attachedList;
@@ -95,17 +99,17 @@ public class LensAttachController {
     }
 
     private void configureDropTarget(ListView<Lens> target, boolean attach) {
-        target.setOnDragOver(e -> {
-            boolean fromOtherList = e.getGestureSource() instanceof ListCell<?> c
+        target.setOnDragOver(event -> {
+            boolean fromOtherList = event.getGestureSource() instanceof ListCell<?> c
                     && c.getListView() != target;
-            if (fromOtherList && e.getDragboard().hasString()) {
-                e.acceptTransferModes(TransferMode.MOVE);
+            if (fromOtherList && event.getDragboard().hasString()) {
+                event.acceptTransferModes(TransferMode.MOVE);
             }
-            e.consume();
+            event.consume();
         });
 
-        target.setOnDragDropped(e -> {
-            Dragboard db = e.getDragboard();
+        target.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasString()) {
                 int lensId = Integer.parseInt(db.getString());
@@ -118,12 +122,13 @@ public class LensAttachController {
                     reload();
                     EventBus.getInstance().publish(new DataChangedEvent(camera.getId(), "CAMERA", attach ? "ATTACH" : "DETACH"));
                     success = true;
-                } catch (Exception ex) {
-                    DialogUtils.error("Error", ex.getMessage());
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE, "Failed to attach/detach lens", e);
+                    DialogUtils.error("Error", e.getMessage());
                 }
             }
-            e.setDropCompleted(success);
-            e.consume();
+            event.setDropCompleted(success);
+            event.consume();
         });
     }
 

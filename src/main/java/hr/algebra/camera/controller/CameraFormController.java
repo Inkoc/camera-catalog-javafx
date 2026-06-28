@@ -21,8 +21,12 @@ import javafx.util.StringConverter;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CameraFormController {
+    private static final Logger LOGGER = Logger.getLogger(CameraFormController.class.getName());
+
     @FXML private TextField nameField;
     @FXML private TextField releaseYearField;
     @FXML private TextField megapixelsField;
@@ -117,6 +121,7 @@ public class CameraFormController {
         } catch (NumberFormatException e) {
             errorLabel.setText("Year, megapixels, speed and price must be valid numbers.");
         } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to save camera", e);
             errorLabel.setText(e.getMessage());
         }
     }
@@ -149,6 +154,7 @@ public class CameraFormController {
         ((Stage) nameField.getScene().getWindow()).close();
     }
 
+    @FXML
     public void handleChooseImage(ActionEvent actionEvent) {
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().add(

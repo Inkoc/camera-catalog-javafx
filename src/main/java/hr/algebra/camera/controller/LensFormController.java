@@ -7,7 +7,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class LensFormController {
+    private static final Logger LOGGER = Logger.getLogger(LensFormController.class.getName());
+
     @FXML private TextField nameField;
     @FXML private TextField focalLengthField;
     @FXML private TextField apertureField;
@@ -55,6 +60,7 @@ public class LensFormController {
         } catch (NumberFormatException e) {
             errorLabel.setText("Focal length, aperture and price must be valid numbers.");
         } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to save lens", e);
             errorLabel.setText(e.getMessage());
         }
     }

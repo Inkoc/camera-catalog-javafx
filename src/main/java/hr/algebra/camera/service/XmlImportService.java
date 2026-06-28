@@ -10,6 +10,7 @@ import hr.algebra.camera.model.enums.Purpose;
 import hr.algebra.camera.service.interfaces.IBrandService;
 import hr.algebra.camera.service.interfaces.ICameraService;
 import hr.algebra.camera.service.interfaces.IXmlImportService;
+import hr.algebra.camera.utils.XmlActionLogger;
 import jakarta.xml.bind.JAXBContext;
 
 import java.io.InputStream;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class XmlImportService implements IXmlImportService {

@@ -8,8 +8,12 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class ImageStorage {
+    private static final Logger LOGGER = Logger.getLogger(ImageStorage.class.getName());
+
     //TODO Add config
     private static final Path IMAGE_DIR = Path.of(System.getProperty("user.home"), ".camera-catalog", "images");
 
@@ -42,7 +46,9 @@ public final class ImageStorage {
 
         try {
             Files.deleteIfExists(IMAGE_DIR.resolve(filename));
-        } catch (IOException ignored) {}
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Failed to delete image: " + filename, e);
+        }
     }
 
     private static void ensureDir() throws IOException {

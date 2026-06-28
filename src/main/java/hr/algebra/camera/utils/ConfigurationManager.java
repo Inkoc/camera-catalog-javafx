@@ -49,7 +49,7 @@ public final class ConfigurationManager {
         } catch (ConfigurationException e) {
             throw e;
         }catch (Exception e) {
-            throw new ConfigurationException("Failed to read configuration");
+            throw new ConfigurationException("Failed to read configuration", e);
         }
 
      }
