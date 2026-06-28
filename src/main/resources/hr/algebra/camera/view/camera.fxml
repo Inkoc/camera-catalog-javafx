@@ -18,5 +18,6 @@
         <Button text="Add New Camera" onAction="#handleAddCamera" style="-fx-background-color: #0e85c3; -fx-text-fill: white;"/>
         <Button text="Edit Selected" onAction="#handleEditCamera" style="-fx-background-color: #5bc0de; -fx-text-fill: white;"/>
         <Button text="Delete Selected" onAction="#handleDeleteCamera" style="-fx-background-color: #d9534f; -fx-text-fill: white;"/>
+        <Button text="Attach Lenses" onAction="#handleAttachLens" style="-fx-background-color: #5cb85c; -fx-text-fill: white;"/>
     </HBox>
 </VBox>

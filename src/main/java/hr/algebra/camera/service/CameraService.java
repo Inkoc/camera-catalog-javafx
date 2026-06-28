@@ -1,6 +1,7 @@
 package hr.algebra.camera.service;
 
 import hr.algebra.camera.model.Camera;
+import hr.algebra.camera.model.Lens;
 import hr.algebra.camera.repository.interfaces.ICameraRepository;
 import hr.algebra.camera.service.interfaces.ICameraService;
 
@@ -62,5 +63,10 @@ public class CameraService implements ICameraService {
     @Override
     public void detachLens(int cameraId, int lensId) {
         cameraRepository.detachLens(cameraId, lensId);
+    }
+
+    @Override
+    public List<Lens> findLensesForCamera(int cameraId) {
+        return cameraRepository.findLensesForCamera(cameraId);
     }
 }

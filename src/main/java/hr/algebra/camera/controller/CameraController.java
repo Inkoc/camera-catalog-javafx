@@ -91,4 +91,17 @@ public class CameraController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
+    public void handleAttachLens(ActionEvent actionEvent) {
+        Camera selected = cameraTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("No Selection", "Please select a camera to attach lenses to.");
+            return;
+        }
+        ViewManager.openModal(
+                "lens-attach.fxml",
+                "Attach Lenses",
+                (LensAttachController c) -> c.setCamera(selected)
+        );
+    }
 }
