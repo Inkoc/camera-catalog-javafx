@@ -12,4 +12,5 @@ public interface ICameraService extends IService<Camera> {
     void attachLens(int cameraId, int lensId);
     void detachLens(int cameraId, int lensId);
     List<Lens> findLensesForCamera(int cameraId);
+    void clearCatalog();
 }

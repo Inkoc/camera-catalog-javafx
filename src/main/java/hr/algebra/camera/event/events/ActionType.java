@@ -7,5 +7,6 @@ public enum ActionType {
     ATTACH,
     DETACH,
     LOGIN,
-    LOGOUT
+    LOGOUT,
+    CLEAR
 }

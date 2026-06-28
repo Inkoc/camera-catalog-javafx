@@ -265,3 +265,11 @@ BEGIN
     RETURN QUERY SELECT * FROM app_user WHERE username = p_username;
 END;
 $$;
+
+CREATE OR REPLACE PROCEDURE clear_all_data()
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    TRUNCATE camera_lens, camera, lens, brand RESTART IDENTITY CASCADE;
+END;
+$$;

@@ -9,6 +9,7 @@ import hr.algebra.camera.model.enums.Purpose;
 import hr.algebra.camera.repository.interfaces.ICameraRepository;
 import hr.algebra.camera.repository.interfaces.IRepository;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class CameraRepository implements ICameraRepository {
     private static final String DELETE = "CALL delete_camera(?)";
     private static final String ATTACH_LENS = "CALL attach_lens_to_camera(?,?)";
     private static final String DETACH_LENS = "CALL detach_lens_from_camera(?,?)";
+    private static final String CLEAR_ALL = "CALL clear_all_data()";
 
     private static final int INSERT_ID_INDEX = 12;
 
@@ -74,9 +76,9 @@ public class CameraRepository implements ICameraRepository {
         try (Connection connection = PostgresConnection.getInstance().getConnection(); CallableStatement statement = connection.prepareCall(INSERT)) {
 
             CallableStatementFactory.bindParams(statement,
-                    camera.getName(), camera.getReleaseYear(), java.math.BigDecimal.valueOf(camera.getMegapixels()),
+                    camera.getName(), camera.getReleaseYear(), BigDecimal.valueOf(camera.getMegapixels()),
                     camera.getSensorType(), camera.getIsoRange(), camera.getMaxShootingSpeed(),
-                    java.math.BigDecimal.valueOf(camera.getPrice()), camera.getImagePath(), camera.getCameraType().name(),
+                    BigDecimal.valueOf(camera.getPrice()), camera.getImagePath(), camera.getCameraType().name(),
                     camera.getPurpose().name(), brandIdOf(camera));
 
             statement.setNull(INSERT_ID_INDEX, Types.INTEGER);
@@ -93,9 +95,9 @@ public class CameraRepository implements ICameraRepository {
     public void update(Camera camera) {
         try (Connection connection = PostgresConnection.getInstance().getConnection(); CallableStatement statement = connection.prepareCall(UPDATE)) {
             CallableStatementFactory.bindParams(statement,
-                    camera.getId(), camera.getName(), camera.getReleaseYear(), java.math.BigDecimal.valueOf(camera.getMegapixels()),
+                    camera.getId(), camera.getName(), camera.getReleaseYear(), BigDecimal.valueOf(camera.getMegapixels()),
                     camera.getSensorType(), camera.getIsoRange(), camera.getMaxShootingSpeed(),
-                    java.math.BigDecimal.valueOf(camera.getPrice()), camera.getImagePath(), camera.getCameraType().name(),
+                    BigDecimal.valueOf(camera.getPrice()), camera.getImagePath(), camera.getCameraType().name(),
                     camera.getPurpose().name(), brandIdOf(camera));
 
             statement.execute();
@@ -132,6 +134,11 @@ public class CameraRepository implements ICameraRepository {
             throw new DatabaseOperationException("Failed to load lenses for camera " + cameraId, e);
         }
         return lenses;
+    }
+
+    @Override
+    public void clearAllData() {
+        execProcedure(CLEAR_ALL, "Failed to clear catalog data");
     }
 
     private void execProcedure(String call, String errorMessage, Object... params) {

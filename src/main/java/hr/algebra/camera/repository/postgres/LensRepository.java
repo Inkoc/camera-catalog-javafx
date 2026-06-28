@@ -4,6 +4,7 @@ import hr.algebra.camera.exception.DatabaseOperationException;
 import hr.algebra.camera.model.Lens;
 import hr.algebra.camera.repository.interfaces.ILensRepository;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +57,9 @@ public class LensRepository implements ILensRepository {
             CallableStatementFactory.bindParams(statement,
                     lens.getName(),
                     lens.getFocalLength(),
-                    java.math.BigDecimal.valueOf(lens.getAperture()),
+                    BigDecimal.valueOf(lens.getAperture()),
                     lens.getMountType(),
-                    java.math.BigDecimal.valueOf(lens.getPrice())
+                    BigDecimal.valueOf(lens.getPrice())
             );
             statement.setNull(INSERT_ID_INDEX, Types.INTEGER);
             statement.registerOutParameter(INSERT_ID_INDEX, Types.INTEGER);
@@ -78,9 +79,9 @@ public class LensRepository implements ILensRepository {
                     lens.getId(),
                     lens.getName(),
                     lens.getFocalLength(),
-                    java.math.BigDecimal.valueOf(lens.getAperture()),
+                    BigDecimal.valueOf(lens.getAperture()),
                     lens.getMountType(),
-                    java.math.BigDecimal.valueOf(lens.getPrice())
+                    BigDecimal.valueOf(lens.getPrice())
             );
             statement.execute();
         } catch (SQLException e) {

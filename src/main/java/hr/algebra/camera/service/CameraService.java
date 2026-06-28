@@ -72,4 +72,9 @@ public class CameraService implements ICameraService {
     public List<Lens> findLensesForCamera(int cameraId) {
         return cameraRepository.findLensesForCamera(cameraId);
     }
+
+    @Override
+    public void clearCatalog() {
+        cameraRepository.clearAllData();
+    }
 }

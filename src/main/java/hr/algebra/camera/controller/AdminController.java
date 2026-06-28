@@ -4,8 +4,11 @@ import hr.algebra.camera.event.EventBus;
 import hr.algebra.camera.event.events.ActionType;
 import hr.algebra.camera.event.events.DataChangedEvent;
 import hr.algebra.camera.event.events.EntityType;
+import hr.algebra.camera.service.interfaces.ICameraService;
 import hr.algebra.camera.service.interfaces.IXmlImportService;
 import hr.algebra.camera.service.interfaces.IXmlExportService;
+import hr.algebra.camera.utils.DialogUtils;
+import hr.algebra.camera.utils.ImageStorage;
 import hr.algebra.camera.utils.ThreadManager;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -27,10 +30,12 @@ public class AdminController {
 
     private final IXmlImportService importService;
     private final IXmlExportService exportService;
+    private final ICameraService cameraService;
 
-    public AdminController(IXmlImportService importService, IXmlExportService exportService) {
+    public AdminController(IXmlImportService importService, IXmlExportService exportService, ICameraService cameraService, ICameraService cameraService1) {
         this.importService = importService;
         this.exportService = exportService;
+        this.cameraService = cameraService1;
     }
 
     @FXML
@@ -67,10 +72,10 @@ public class AdminController {
 
     @FXML
     public void handleExport(ActionEvent actionEvent) {
-        javafx.stage.FileChooser fc = new javafx.stage.FileChooser();
+        FileChooser fc = new FileChooser();
         fc.setInitialFileName("camera-catalog.xml");
-        fc.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("XML", "*.xml"));
-        java.io.File file = fc.showSaveDialog(statusLabel.getScene().getWindow());
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
+        File file = fc.showSaveDialog(statusLabel.getScene().getWindow());
         if (file == null) return;
 
         statusLabel.setText("Exporting…");
@@ -90,6 +95,36 @@ public class AdminController {
         task.setOnFailed(e -> {
             statusLabel.setText("Export failed.");
             LOGGER.log(Level.SEVERE, "Export failed", task.getException());
+        });
+
+        ThreadManager.run(task);
+    }
+
+    @FXML
+    private void handleClear() {
+        boolean confirmed = DialogUtils.confirm(
+                "Clear catalog",
+                "This permanently deletes all cameras, lenses and brands. Continue?"
+        );
+        if (!confirmed) return;
+        statusLabel.setText("Clearing…");
+
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                cameraService.clearCatalog();
+                ImageStorage.clearAll();
+                return null;
+            }
+        };
+
+        task.setOnSucceeded(e -> {
+            statusLabel.setText("Catalog cleared.");
+            EventBus.getInstance().publish(new DataChangedEvent(0, EntityType.CAMERA, ActionType.CLEAR));
+        });
+        task.setOnFailed(e -> {
+            statusLabel.setText("Clear failed.");
+            DialogUtils.error("Clear failed", String.valueOf(task.getException().getMessage()));
         });
 
         ThreadManager.run(task);

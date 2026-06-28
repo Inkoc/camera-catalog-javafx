@@ -13,6 +13,6 @@
 
     <Button fx:id="importButton" text="Import catalog from XML" onAction="#handleImport"/>
     <Button fx:id="exportButton" text="Export catalog to XML" onAction="#handleExport"/>
-
+    <Button text="Clear catalog" onAction="#handleClear" style="-fx-background-color: #d9534f; -fx-text-fill: white;"/>
     <Label fx:id="statusLabel"/>
 </VBox>

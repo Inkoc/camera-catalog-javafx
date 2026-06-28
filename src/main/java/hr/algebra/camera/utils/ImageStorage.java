@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 public final class ImageStorage {
     private static final Logger LOGGER = Logger.getLogger(ImageStorage.class.getName());
@@ -55,5 +56,20 @@ public final class ImageStorage {
     private static String extensionOf(String name) {
         int dot = name.lastIndexOf('.');
         return dot == -1 ? "" : name.substring(dot);
+    }
+
+    public static void clearAll() {
+        if (!Files.exists(AppPaths.IMAGES)) return;
+        try (Stream<Path> files = Files.list(AppPaths.IMAGES)) {
+            files.forEach(p -> {
+                try {
+                    Files.deleteIfExists(p);
+                } catch (IOException e) {
+                    LOGGER.log(Level.WARNING, "Failed to delete image: " + p, e);
+                }
+            });
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Failed to clear images directory", e);
+        }
     }
 }

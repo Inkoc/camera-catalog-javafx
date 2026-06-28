@@ -1,6 +1,7 @@
 package hr.algebra.camera.utils;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public final class DialogUtils {
     private DialogUtils() {}
@@ -23,5 +24,14 @@ public final class DialogUtils {
         alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
+    }
+
+    public static boolean confirm(String title, String msg) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+
+        return alert.showAndWait().filter(b -> b == ButtonType.OK).isPresent();
     }
 }
