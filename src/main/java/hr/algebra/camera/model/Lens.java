@@ -1,7 +1,5 @@
 package hr.algebra.camera.model;
 
-import java.util.Objects;
-
 public class Lens  extends AbstractEntity{
     private int focalLength;
     private double aperture;

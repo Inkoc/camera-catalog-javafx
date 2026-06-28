@@ -128,7 +128,7 @@ public class Camera extends AbstractEntity{
     }
 
     public List<Lens> getCompatibleLenses() {
-        return compatibleLenses;
+        return List.copyOf(compatibleLenses);
     }
 
     public void addCompatibleLenses(Lens lens) {
