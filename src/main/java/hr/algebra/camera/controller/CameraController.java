@@ -17,7 +17,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -29,6 +28,7 @@ import java.util.logging.Logger;
 
 public class CameraController {
     private static final Logger LOGGER = Logger.getLogger(CameraController.class.getName());
+    private static final String NO_SELECTION = "No Selection";
 
     @FXML private TextField searchField;
     @FXML private ComboBox<CameraType> typeFilter;
@@ -99,7 +99,7 @@ public class CameraController {
         Camera selected = cameraTable.getSelectionModel().getSelectedItem();
 
         if (selected == null) {
-            DialogUtils.info("No Selection", "Please select a camera from the table to edit.");
+            DialogUtils.info(NO_SELECTION, "Please select a camera from the table to edit.");
             return;
         }
 
@@ -110,7 +110,7 @@ public class CameraController {
     public void handleDeleteCamera(ActionEvent actionEvent) {
         Camera selected = cameraTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            DialogUtils.info("No Selection", "Please select a camera from the table to delete.");
+            DialogUtils.info(NO_SELECTION, "Please select a camera from the table to delete.");
             return;
         }
 
@@ -128,7 +128,7 @@ public class CameraController {
     public void handleAttachLens(ActionEvent actionEvent) {
         Camera selected = cameraTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            DialogUtils.info("No Selection", "Please select a camera to attach lenses to.");
+            DialogUtils.info(NO_SELECTION, "Please select a camera to attach lenses to.");
             return;
         }
         ViewManager.openModal(

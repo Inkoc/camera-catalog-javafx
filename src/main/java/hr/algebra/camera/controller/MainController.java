@@ -17,8 +17,6 @@ public class MainController {
     @FXML
     private BorderPane rootPane;
 
-    public MainController() { }
-
     @FXML
     public void handleCameras(ActionEvent actionEvent) {
         rootPane.setCenter(ViewManager.load("camera.fxml"));

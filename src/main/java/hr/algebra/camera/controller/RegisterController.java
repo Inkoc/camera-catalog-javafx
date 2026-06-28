@@ -23,8 +23,8 @@ public class RegisterController {
 
     private final IAuthService authService;
 
-    public RegisterController(IAuthService authService, IAuthService authService1) {
-        this.authService = authService1;
+    public RegisterController(IAuthService authService) {
+        this.authService = authService;
     }
 
     @FXML

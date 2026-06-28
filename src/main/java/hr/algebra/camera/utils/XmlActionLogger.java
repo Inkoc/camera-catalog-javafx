@@ -14,8 +14,11 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,7 +55,7 @@ public final class XmlActionLogger implements EventListener {
             Document document;
 
             if (Files.exists(AppPaths.ACTION_LOG) && Files.size(AppPaths.ACTION_LOG) > 0) {
-                try (java.io.InputStream in = Files.newInputStream(AppPaths.ACTION_LOG)) {
+                try (InputStream in = Files.newInputStream(AppPaths.ACTION_LOG)) {
                     document = builder.parse(in);
                 }
             } else {
@@ -60,7 +63,7 @@ public final class XmlActionLogger implements EventListener {
                 document.appendChild(document.createElement("actionLog"));
             }
             Element element = document.createElement("action");
-            element.setAttribute("timestamp", LocalDateTime.now().toString());
+            element.setAttribute("timestamp", LocalDateTime.now(ZoneId.systemDefault()).toString());
             element.setAttribute("user", user);
             element.setAttribute("entity", event.getEntityType().name());
             element.setAttribute("type", event.getAction().name());
@@ -68,7 +71,7 @@ public final class XmlActionLogger implements EventListener {
             document.getDocumentElement().appendChild(element);
 
             Transformer t = TransformerFactory.newInstance().newTransformer();
-            try (java.io.OutputStream out = Files.newOutputStream(AppPaths.ACTION_LOG)) {
+            try (OutputStream out = Files.newOutputStream(AppPaths.ACTION_LOG)) {
                 t.transform(new DOMSource(document), new StreamResult(out));
             }
         } catch (Exception e) {

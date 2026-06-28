@@ -44,7 +44,7 @@ public final class ImageStorage {
         try {
             Files.deleteIfExists(AppPaths.IMAGES.resolve(filename));
         } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Failed to delete image: " + filename, e);
+            LOGGER.log(Level.WARNING, e, () -> "Failed to delete image: " + filename);
         }
     }
 

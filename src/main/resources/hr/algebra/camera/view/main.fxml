@@ -8,32 +8,24 @@
             prefWidth="900" prefHeight="650">
     <top>
         <MenuBar>
-            <menus>
-                <Menu text="Katalog">
-                    <items>
-                        <MenuItem text="Kamere" onAction="#handleCameras"/>
-                        <MenuItem text="Objektivi" onAction="#handleLenses"/>
-                    </items>
-                </Menu>
-                <Menu text="Admin">
-                    <items>
-                        <MenuItem text="Upravljanje podacima" onAction="#handleAdmin"/>
-                    </items>
-                </Menu>
-                <Menu text="Korisnik">
-                    <items>
-                        <MenuItem text="Odjava" onAction="#handleLogout"/>
-                    </items>
-                </Menu>
-            </menus>
+            <Menu text="Catalog">
+                <MenuItem text="Cameras" onAction="#handleCameras"/>
+                <MenuItem text="Lenses" onAction="#handleLenses"/>
+            </Menu>
+            <Menu text="Admin">
+                <MenuItem text="Data Management" onAction="#handleAdmin"/>
+            </Menu>
+            <Menu text="User">
+                <MenuItem text="Logout" onAction="#handleLogout"/>
+            </Menu>
         </MenuBar>
     </top>
     <center>
         <VBox alignment="CENTER" spacing="12">
             <padding><Insets top="40"/></padding>
-            <Label text="Dobrodosli u Camera Catalog!"
+            <Label text="Welcome to Camera Catalog!"
                    style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #333;"/>
-            <Label text="Navigirajte koristeci gornji izbornik."
+            <Label text="Navigate using the menu above."
                    style="-fx-font-size: 13; -fx-text-fill: #777;"/>
         </VBox>
     </center>

@@ -8,7 +8,6 @@ import hr.algebra.camera.service.interfaces.ICameraService;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class CameraService implements ICameraService {
 

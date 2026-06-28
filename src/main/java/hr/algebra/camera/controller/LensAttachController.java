@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 public class LensAttachController {
     private static final Logger LOGGER = Logger.getLogger(LensAttachController.class.getName());
 
-    @FXML public Label titleLabel;
-    @FXML public ListView availableList;
-    @FXML public ListView attachedList;
+    @FXML private Label titleLabel;
+    @FXML private ListView<Lens> availableList;
+    @FXML private ListView<Lens> attachedList;
 
     private Camera camera;
     private final ICameraService cameraService;
