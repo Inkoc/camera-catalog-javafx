@@ -45,7 +45,7 @@ public class LensController {
                 TableColumnFactory.create("Focal Length (mm)", 130, Lens::getFocalLength),
                 TableColumnFactory.create("Aperture (f/)", 110, Lens::getAperture),
                 TableColumnFactory.create("Mount", 100, Lens::getMountType),
-                TableColumnFactory.create("Price ($)", 100, Lens::getPrice)
+                TableColumnFactory.create("Price (€)", 100, Lens::getPrice)
         );
     }
 
@@ -79,7 +79,7 @@ public class LensController {
 
         try {
             lensService.deleteById(selected.getId());
-            EventBus.getInstance().publish(new DataChangedEvent("LENS", selected.getId()));
+            EventBus.getInstance().publish(new DataChangedEvent(selected.getId(), "LENS", "DELETE"));
         } catch (Exception e) {
             DialogUtils.error("Error", "Could not delete lens: " + e.getMessage());
         }
@@ -92,7 +92,7 @@ public class LensController {
         );
 
         if (formController.isSaved()) {
-            EventBus.getInstance().publish(new DataChangedEvent("LENS", 0));
+            EventBus.getInstance().publish(new DataChangedEvent(0, "LENS", "SAVE"));
         }
     }
 }

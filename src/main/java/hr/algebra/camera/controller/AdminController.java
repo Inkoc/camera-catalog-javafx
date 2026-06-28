@@ -1,5 +1,7 @@
 package hr.algebra.camera.controller;
 
+import hr.algebra.camera.event.EventBus;
+import hr.algebra.camera.event.events.DataChangedEvent;
 import hr.algebra.camera.service.interfaces.IDataImportService;
 import hr.algebra.camera.utils.DialogUtils;
 import hr.algebra.camera.utils.ThreadManager;
@@ -34,6 +36,7 @@ public class AdminController {
         task.setOnSucceeded(e -> {
             statusLabel.setText("Imported " + task.getValue() + " new cameras.");
             importButton.setDisable(false);
+            EventBus.getInstance().publish(new DataChangedEvent(0, "CAMERA", "IMPORT"));
         });
         task.setOnFailed(e -> {
             statusLabel.setText("Import failed.");

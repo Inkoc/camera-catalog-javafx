@@ -116,7 +116,7 @@ public class LensAttachController {
                         cameraService.detachLens(camera.getId(), lensId);
                     }
                     reload();
-                    EventBus.getInstance().publish(new DataChangedEvent("CAMERA", camera.getId()));
+                    EventBus.getInstance().publish(new DataChangedEvent(camera.getId(), "CAMERA", attach ? "ATTACH" : "DETACH"));
                     success = true;
                 } catch (Exception ex) {
                     DialogUtils.error("Error", ex.getMessage());

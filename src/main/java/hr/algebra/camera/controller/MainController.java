@@ -1,6 +1,8 @@
 package hr.algebra.camera.controller;
 
 import hr.algebra.camera.auth.SessionManager;
+import hr.algebra.camera.event.EventBus;
+import hr.algebra.camera.event.events.DataChangedEvent;
 import hr.algebra.camera.utils.ConfigurationManager;
 import hr.algebra.camera.utils.DialogUtils;
 import hr.algebra.camera.utils.ViewManager;
@@ -38,7 +40,7 @@ public class MainController {
     @FXML
     public void handleLogout(ActionEvent actionEvent) {
         SessionManager.getInstance().logout();
-
+        EventBus.getInstance().publish(new DataChangedEvent(0, "AUTH", "LOGOUT"));
         ViewManager.switchTo(
                 "login.fxml",
                 ConfigurationManager.getWindowTitle()

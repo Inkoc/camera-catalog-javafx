@@ -1,11 +1,13 @@
 package hr.algebra.camera;
 
 import hr.algebra.camera.auth.PasswordHasher;
+import hr.algebra.camera.event.EventBus;
 import hr.algebra.camera.exception.DatabaseOperationException;
 import hr.algebra.camera.repository.postgres.PostgresConnection;
 import hr.algebra.camera.utils.ConfigurationManager;
 import hr.algebra.camera.utils.ThreadManager;
 import hr.algebra.camera.utils.ViewManager;
+import hr.algebra.camera.utils.XmlActionLogger;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -17,9 +19,8 @@ public class CameraApplication extends Application {
     @Override
     public void start(Stage stage) {
         ConfigurationManager.load();
-
+        EventBus.getInstance().subscribe(XmlActionLogger.getInstance());
         seedDefaultAdmin();
-
         ViewManager.init(stage);
         ViewManager.switchTo("login.fxml", ConfigurationManager.getWindowTitle());
     }

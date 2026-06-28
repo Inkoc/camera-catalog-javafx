@@ -84,7 +84,7 @@ public class CameraController {
         try {
             cameraService.deleteById(selected.getId());
             ImageStorage.delete(selected.getImagePath());
-            EventBus.getInstance().publish(new DataChangedEvent("CAMERA", selected.getId()));
+            EventBus.getInstance().publish(new DataChangedEvent(selected.getId(), "CAMERA", "DELETE"));
         } catch (Exception e) {
             showAlert("Error", "Could not delete camera: " + e.getMessage());
         }
@@ -98,7 +98,7 @@ public class CameraController {
         );
 
         if (formController.isSaved()) {
-            EventBus.getInstance().publish(new DataChangedEvent("CAMERA", 0));
+            EventBus.getInstance().publish(new DataChangedEvent(0, "CAMERA", "SAVE"));
         }
     }
 
