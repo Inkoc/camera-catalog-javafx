@@ -39,7 +39,7 @@ public class AuthService implements IAuthService {
         }
 
         if (userRepository.findByUsername(username).isPresent()) {
-            throw new AuthenticationException("Username is already exists.");
+            throw new AuthenticationException("Username already exists.");
         }
 
         String hashedPassword = PasswordHasher.hash(rawPassword);

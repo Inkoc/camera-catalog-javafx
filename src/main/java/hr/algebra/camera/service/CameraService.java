@@ -39,6 +39,10 @@ public class CameraService implements ICameraService {
 
     @Override
     public void update(Camera camera) {
+        if (camera.getName() == null || camera.getName().isBlank()) {
+            throw new IllegalArgumentException("Camera name cannot be empty");
+        }
+
         cameraRepository.update(camera);
     }
 

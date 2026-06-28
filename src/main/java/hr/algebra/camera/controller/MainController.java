@@ -8,7 +8,6 @@ import hr.algebra.camera.utils.DialogUtils;
 import hr.algebra.camera.utils.ViewManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 
 public class MainController {
@@ -45,13 +44,5 @@ public class MainController {
                 "login.fxml",
                 ConfigurationManager.getWindowTitle()
         );
-    }
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

@@ -26,7 +26,6 @@ public final class ConfigurationManager {
 
     public static void load(){
         if (loaded) return;
-        //TODO Improve exceptions
         try(InputStream inputStream = ConfigurationManager.class.getResourceAsStream(CONFIG_PATH)) {
             if (inputStream == null) throw new ConfigurationException("Config file not found");
 
@@ -48,10 +47,11 @@ public final class ConfigurationManager {
             loaded = true;
         } catch (ConfigurationException e) {
             throw e;
-        }catch (Exception e) {
-            throw new ConfigurationException("Failed to read configuration", e);
+        }catch (NumberFormatException e) {
+            throw new ConfigurationException("Invalid number format in configuration file for width/height", e);
+        } catch (Exception e) {
+            throw new ConfigurationException("Failed to read and parse XML configuration", e);
         }
-
      }
 
     private static String readText(Document doc, String tag) {

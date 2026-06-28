@@ -31,7 +31,7 @@ public class CameraApplication extends Application {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         LOGGER.info("Application shutting down");
         ThreadManager.shutdown();
     }

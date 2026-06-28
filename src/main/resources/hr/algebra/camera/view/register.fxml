@@ -32,7 +32,7 @@
 
         <Label layoutX="50.0" layoutY="93.0" prefHeight="17.0" prefWidth="100.0" text="Confirm Password:"
                GridPane.rowIndex="3"/>
-        <PasswordField fx:id="confirmPasswordField" layoutX="116.0" layoutY="89.0" promptText="repeat password"
+        <PasswordField fx:id="confirmPasswordField" promptText="repeat password"
                        GridPane.columnIndex="1" GridPane.rowIndex="3"/>
     </GridPane>
     <VBox alignment="CENTER">

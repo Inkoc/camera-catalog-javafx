@@ -4,7 +4,6 @@ import hr.algebra.camera.event.EventBus;
 import hr.algebra.camera.event.events.DataChangedEvent;
 import hr.algebra.camera.exception.AuthenticationException;
 import hr.algebra.camera.model.User;
-import hr.algebra.camera.service.XmlImportService;
 import hr.algebra.camera.service.interfaces.IAuthService;
 import hr.algebra.camera.utils.ConfigurationManager;
 import hr.algebra.camera.utils.ViewManager;
@@ -14,7 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoginController {

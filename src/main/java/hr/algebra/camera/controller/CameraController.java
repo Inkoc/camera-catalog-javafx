@@ -7,6 +7,7 @@ import hr.algebra.camera.model.Camera;
 import hr.algebra.camera.model.enums.CameraType;
 import hr.algebra.camera.model.enums.Purpose;
 import hr.algebra.camera.service.interfaces.ICameraService;
+import hr.algebra.camera.utils.DialogUtils;
 import hr.algebra.camera.utils.ImageStorage;
 import hr.algebra.camera.utils.TableColumnFactory;
 import hr.algebra.camera.utils.ViewManager;
@@ -95,7 +96,7 @@ public class CameraController {
         Camera selected = cameraTable.getSelectionModel().getSelectedItem();
 
         if (selected == null) {
-            showAlert("No Selection", "Please select a camera from the table to edit.");
+            DialogUtils.info("No Selection", "Please select a camera from the table to edit.");
             return;
         }
 
@@ -106,7 +107,7 @@ public class CameraController {
     public void handleDeleteCamera(ActionEvent actionEvent) {
         Camera selected = cameraTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("No Selection", "Please select a camera from the table to delete.");
+            DialogUtils.info("No Selection", "Please select a camera from the table to delete.");
             return;
         }
 
@@ -116,7 +117,7 @@ public class CameraController {
             EventBus.getInstance().publish(new DataChangedEvent(selected.getId(), "CAMERA", "DELETE"));
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to delete camera", e);
-            showAlert("Error", "Could not delete camera: " + e.getMessage());
+            DialogUtils.error("Error", "Could not delete camera: " + e.getMessage());
         }
     }
 
@@ -124,7 +125,7 @@ public class CameraController {
     public void handleAttachLens(ActionEvent actionEvent) {
         Camera selected = cameraTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("No Selection", "Please select a camera to attach lenses to.");
+            DialogUtils.info("No Selection", "Please select a camera to attach lenses to.");
             return;
         }
         ViewManager.openModal(
@@ -152,13 +153,5 @@ public class CameraController {
         if (formController.isSaved()) {
             EventBus.getInstance().publish(new DataChangedEvent(0, "CAMERA", "SAVE"));
         }
-    }
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

@@ -36,7 +36,7 @@
                 prefWidth="172.0"
                 style="-fx-background-color: #0e85c3; -fx-text-fill: white; -fx-font-weight: bold;" text="Login"
                 textAlignment="CENTER"/>
-        <Hyperlink text="Have an account? Log in" onAction="#handleBackToRegister"/>
+        <Hyperlink text="No account? Register" onAction="#handleBackToRegister"/>
     </VBox>
 
     <Label fx:id="errorLabel" textFill="red" wrapText="true"/>

@@ -61,11 +61,10 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
 
             for (int i = 0; i < parameterTypes.length; i++) {
                 Object dependency = dependencies.get(parameterTypes[i]);
-                if (dependency != null) {
-                    initArgs[i] = dependency;
-                } else {
-                    initArgs[i] = null;
+                if (dependency == null) {
+                    throw new IllegalStateException("No dependency registered for " + parameterTypes[i].getName());
                 }
+                initArgs[i] = dependency;
             }
 
             return targetConstructor.newInstance(initArgs);
