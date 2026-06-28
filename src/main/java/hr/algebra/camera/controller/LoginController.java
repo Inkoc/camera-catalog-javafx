@@ -8,6 +8,7 @@ import hr.algebra.camera.service.XmlImportService;
 import hr.algebra.camera.service.interfaces.IAuthService;
 import hr.algebra.camera.utils.ConfigurationManager;
 import hr.algebra.camera.utils.ViewManager;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -50,4 +51,8 @@ public class LoginController {
         }
     }
 
+    @FXML
+    public void handleBackToRegister(ActionEvent actionEvent) {
+        ViewManager.switchTo("register.fxml", ConfigurationManager.getWindowTitle());
+    }
 }
